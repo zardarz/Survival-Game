@@ -37,11 +37,15 @@ public class TerrainGenerator : MonoBehaviour
 
         for(int x = 0; x < textureSize.x; x++) {
             for(int y = 0; y < textureSize.y; y++) {
-                Color pixelColor = new Color(0,1,0);
+                Color pixelColor = new Color(0, Random.Range(0.4f,0.7f) ,0);
 
                 grassTexture.SetPixel(x,y, pixelColor);
             }
         }
+
+        grassTexture.filterMode = FilterMode.Point;
+        grassTexture.wrapMode = TextureWrapMode.Clamp;
+
 
         grassTexture.Apply();
 
