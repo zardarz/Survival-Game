@@ -1,4 +1,3 @@
-using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Tilemaps;
 
@@ -68,7 +67,7 @@ public class TerrainGenerator : MonoBehaviour
     }
 
     private void MakeUniqueGrassTextures() {
-        for(int i = 0; i < amountOfUniqueGrassTextures; i++) {
+        for(int i = 0; i < amountOfUniqueGrassTextures; i++) { // makes a specific amount of grass textures that are just repeated
             Texture2D grassTexture = GenerateRandomGrassTexture();
             grassTextures[i] = grassTexture;
         }
