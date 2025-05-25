@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Tilemaps;
 
@@ -6,30 +7,43 @@ public class TerrainGenerator : MonoBehaviour
     [Header("Refrences")]
     [SerializeField] private Tilemap tilemap;
 
+    private Texture2D[] grassTextures;
+
     [Header("Settings")]
     [SerializeField] private Vector2Int textureSize;
 
+    [Range(0,1)]
+    [SerializeField] private float textureBrightnessMin;
+
+    [Range(0,1)]
+    [SerializeField] private float textureBrightnessMax;
+
+    [SerializeField] private int amountOfUniqueGrassTextures;
+
     void Start() {
-        for(int x = 0; x < 5; x++) {
-            for(int y = 0; y < 5; y++) {
+        grassTextures = new Texture2D[amountOfUniqueGrassTextures];
+        MakeUniqueGrassTextures();
+
+        for(int x = -50; x < 50; x++) {
+            for(int y = -50; y < 50; y++) {
                 PlaceGrass(x, y);
             }
         }
     }
 
     private void PlaceGrass(int x, int y) {
-        Tile grassTile = ScriptableObject.CreateInstance<Tile>();
+        Tile grassTile = ScriptableObject.CreateInstance<Tile>(); // make a new tile
 
-        Sprite grassSprite = Sprite.Create(
-            GenerateRandomGrassTexture(),
+        Sprite grassSprite = Sprite.Create( // make a new sprite
+            grassTextures[Random.Range(0, amountOfUniqueGrassTextures)],
             new Rect(0, 0, textureSize.x, textureSize.y),
             new Vector2(0.5f, 0.5f),
             16f // pixels per unit
         );
 
-        grassTile.sprite = grassSprite;
+        grassTile.sprite = grassSprite; // apply the sprite to the tile
 
-        tilemap.SetTile(new Vector3Int(x,y,0), grassTile);
+        tilemap.SetTile(new Vector3Int(x,y,0), grassTile); // place the tile
     }
 
     private Texture2D GenerateRandomGrassTexture() {
@@ -37,18 +51,26 @@ public class TerrainGenerator : MonoBehaviour
 
         for(int x = 0; x < textureSize.x; x++) {
             for(int y = 0; y < textureSize.y; y++) {
-                Color pixelColor = new Color(0, Random.Range(0.4f,0.7f) ,0);
+                float brightness = Random.Range(textureBrightnessMin, textureBrightnessMax); // get how bright the pixel should be 
 
-                grassTexture.SetPixel(x,y, pixelColor);
+                Color pixelColor = new Color(0.05f * brightness, 0.35f * brightness, 0.13f * brightness); // make a new color preselected green * brightness
+
+                grassTexture.SetPixel(x,y, pixelColor); // set the pixel
             }
         }
 
-        grassTexture.filterMode = FilterMode.Point;
+        grassTexture.filterMode = FilterMode.Point; // make the texture not look like poop
         grassTexture.wrapMode = TextureWrapMode.Clamp;
 
-
-        grassTexture.Apply();
+        grassTexture.Apply(); // apply the texture
 
         return grassTexture;
+    }
+
+    private void MakeUniqueGrassTextures() {
+        for(int i = 0; i < amountOfUniqueGrassTextures; i++) {
+            Texture2D grassTexture = GenerateRandomGrassTexture();
+            grassTextures[i] = grassTexture;
+        }
     }
 }
