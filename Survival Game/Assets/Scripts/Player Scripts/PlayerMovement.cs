@@ -33,8 +33,11 @@ public class PlayerMovement : MonoBehaviour
     }
 
     void FixedUpdate() {
+        // normalize the vector to make the player move the same speed diagonaly 
+        Vector2 vectorToMove = new Vector2(movement.x, movement.y).normalized * speed;
+
         // move the player based on the movemnt vector
-        rb.MovePosition(rb.position + movement * speed * Time.fixedDeltaTime);
+        rb.MovePosition(rb.position + vectorToMove * Time.fixedDeltaTime);
     }
 
     void flipPlayerBasedOnMousePos() {
