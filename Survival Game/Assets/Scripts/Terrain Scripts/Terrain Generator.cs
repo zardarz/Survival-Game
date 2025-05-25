@@ -21,9 +21,9 @@ public class TerrainGenerator : MonoBehaviour
         Tile grassTile = ScriptableObject.CreateInstance<Tile>();
 
         Sprite grassSprite = Sprite.Create(
-            GenerateRandomGrassTexture(), 
-            new Rect(0, 0, textureSize.x, textureSize.y), 
-            new Vector2(0.5f, 0.5f), 
+            GenerateRandomGrassTexture(),
+            new Rect(0, 0, textureSize.x, textureSize.y),
+            new Vector2(0.5f, 0.5f),
             16f // pixels per unit
         );
 
@@ -37,11 +37,13 @@ public class TerrainGenerator : MonoBehaviour
 
         for(int x = 0; x < textureSize.x; x++) {
             for(int y = 0; y < textureSize.y; y++) {
-                Color pixelColor = Color.blue;
+                Color pixelColor = new Color(0,1,0);
 
                 grassTexture.SetPixel(x,y, pixelColor);
             }
         }
+
+        grassTexture.Apply();
 
         return grassTexture;
     }
