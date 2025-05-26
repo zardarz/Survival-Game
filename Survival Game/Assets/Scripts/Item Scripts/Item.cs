@@ -9,6 +9,8 @@ public class Item : ScriptableObject
 
     [SerializeField] private bool stackable;
 
+    [SerializeField] private bool showWhenHolding;
+
     private int quantity;
 
     public int inventorySlot;
@@ -27,5 +29,9 @@ public class Item : ScriptableObject
 
     public int GetQuantity() {
         return quantity;
+    }
+
+    public bool GetShowWhenHolding() {
+        return showWhenHolding;
     }
 }

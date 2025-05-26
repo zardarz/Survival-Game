@@ -15,4 +15,5 @@ MonoBehaviour:
   itemName: Test Item 2
   sprite: {fileID: 1027518882, guid: 9529ac056393945b487ce27bf6214907, type: 3}
   stackable: 0
+  showWhenHolding: 1
   inventorySlot: 0
