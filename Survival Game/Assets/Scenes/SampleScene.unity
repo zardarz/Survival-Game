@@ -878,8 +878,8 @@ Transform:
   m_GameObject: {fileID: 888328314}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0.178, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_LocalPosition: {x: 0.22, y: 0, z: 0}
+  m_LocalScale: {x: 0.5, y: 0.5, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 890909493}
@@ -1020,6 +1020,7 @@ GameObject:
   m_Component:
   - component: {fileID: 909248375}
   - component: {fileID: 909248374}
+  - component: {fileID: 909248376}
   m_Layer: 0
   m_Name: Map
   m_TagString: Untagged
@@ -1040,10 +1041,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   tilemap: {fileID: 738529562}
-  textureSize: {x: 16, y: 16}
-  textureBrightnessMin: 0.95
-  textureBrightnessMax: 1
-  amountOfUniqueGrassTextures: 10
+  GrassColor: {r: 0.15129745, g: 0.5849056, b: 0, a: 0}
 --- !u!4 &909248375
 Transform:
   m_ObjectHideFlags: 0
@@ -1060,6 +1058,18 @@ Transform:
   - {fileID: 1418644984}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &909248376
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 909248373}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9120d9533a2fb4a1b911f59268d54c45, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &965507498
 GameObject:
   m_ObjectHideFlags: 0
