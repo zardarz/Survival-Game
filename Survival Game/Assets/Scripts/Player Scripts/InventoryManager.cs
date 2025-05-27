@@ -1,4 +1,3 @@
-using System;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
@@ -24,6 +23,7 @@ public class InventoryManager : MonoBehaviour
 
         hotBarItems[0] = Instantiate(testItem);
         hotBarItems[1] = Instantiate(testPlaceable);
+        hotBarItems[1].quantity = 200;
     }
 
     void Update() {
@@ -112,16 +112,19 @@ public class InventoryManager : MonoBehaviour
 
         foreach (Transform child in hotBarGO.transform) { // go for each child in the hot bar gameobject
 
-            if(hotBarItems[i] == null) { // if there is no item in the slot
+            Item currentItem = hotBarItems[i];
+
+            if(currentItem == null || currentItem.quantity <= 0) { // if there is no item in the slot or the item quanitiy is at 0
                 child.GetChild(0).GetComponent<TMP_Text>().text = ""; // set the text to be nothing
+                hotBarItems[i] = null; // remove the item from the hotbar
                 i++;  // continue to the next child
                 continue;
             }
 
-            if(hotBarItems[i].GetQuantity() == 0) { // if there is no count, we set the text to be nothing
+            if(currentItem.GetQuantity() == 0) { // if there is no count, we set the text to be nothing
                 child.GetChild(0).GetComponent<TMP_Text>().text = "";
             } else {
-                child.GetChild(0).GetComponent<TMP_Text>().text = hotBarItems[i].GetQuantity().ToString(); // get the child (which is a text mesh pro) and set the text to the count of the item
+                child.GetChild(0).GetComponent<TMP_Text>().text = currentItem.GetQuantity().ToString(); // get the child (which is a text mesh pro) and set the text to the count of the item
             }
 
 

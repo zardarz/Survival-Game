@@ -1177,7 +1177,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c7ce5e648f9634d0bbe07df7a50f5af6, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  tilemap: {fileID: 738529562}
 --- !u!4 &909248375
 Transform:
   m_ObjectHideFlags: 0
@@ -2445,7 +2444,7 @@ MonoBehaviour:
   slotSelected: 1
   hand: {fileID: 888328316}
   testItem: {fileID: 11400000, guid: ee9c948dbf81d451c8f2181175249916, type: 2}
-  testPlaceable: {fileID: 0}
+  testPlaceable: {fileID: 11400000, guid: 99098a769b99449babae04f47e81edbd, type: 2}
 --- !u!1 &2136324950
 GameObject:
   m_ObjectHideFlags: 0

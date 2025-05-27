@@ -15,7 +15,7 @@ public class Item : ScriptableObject
 
     private bool spriteWasGenerated = false;
 
-    private int quantity = 1;
+    public int quantity = 1;
 
     public string GetName() {
         return itemName;
@@ -61,7 +61,6 @@ public class Item : ScriptableObject
             16f // pixels per unit
         );
     }
-
 
     public virtual void Use() {Debug.Log(itemName + " was used");}
 }
