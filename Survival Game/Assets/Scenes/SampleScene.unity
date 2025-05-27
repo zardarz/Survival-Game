@@ -1178,7 +1178,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   tilemap: {fileID: 738529562}
-  grassColor: {r: 0.13151999, g: 0.41099998, b: 0.009863995, a: 0}
 --- !u!4 &909248375
 Transform:
   m_ObjectHideFlags: 0
@@ -1207,6 +1206,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9120d9533a2fb4a1b911f59268d54c45, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  grassColor: {r: 0.06935414, g: 0.33962262, b: 0.008009966, a: 1}
+  stoneColor: {r: 0.26415092, g: 0.26041293, b: 0.26041293, a: 1}
 --- !u!1 &965507498
 GameObject:
   m_ObjectHideFlags: 0
@@ -2434,12 +2435,12 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   items: []
   hotBarItems:
-  - {fileID: 11400000, guid: f89e10819974a49d79c8de24c7c472d1, type: 2}
-  - {fileID: 11400000, guid: dbea447fc74b84a80aa3c6532eaa5413, type: 2}
+  - {fileID: 11400000, guid: ee9c948dbf81d451c8f2181175249916, type: 2}
   - {fileID: 0}
   - {fileID: 0}
   - {fileID: 0}
-  - {fileID: 11400000, guid: f89e10819974a49d79c8de24c7c472d1, type: 2}
+  - {fileID: 0}
+  - {fileID: 0}
   hotBarGO: {fileID: 1715273000}
   slotSelected: 1
   hand: {fileID: 888328316}

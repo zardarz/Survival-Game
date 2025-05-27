@@ -11,9 +11,11 @@ public class Item : ScriptableObject
 
     [SerializeField] private bool showWhenHolding;
 
-    private int quantity = 1;
+    [SerializeField] private bool generatedSprite;
 
-    public int inventorySlot;
+    private bool spriteWasGenerated = false;
+
+    private int quantity = 1;
 
     public string GetName() {
         return itemName;
@@ -34,4 +36,32 @@ public class Item : ScriptableObject
     public bool GetShowWhenHolding() {
         return showWhenHolding;
     }
+
+    public bool GetGeneratedSprite() {
+        return generatedSprite;
+    }
+
+    public void SetSprite(Sprite newSprite) {
+        sprite = newSprite;
+    }
+
+    public void SpriteWasGenerated() {
+        spriteWasGenerated = true;
+    }
+
+    public bool GetSpriteWasGenerated() {
+        return spriteWasGenerated;
+    }
+
+    public void GenerateSprite() {
+        sprite = Sprite.Create(
+            RandomTextureGenerator.GetRandomTexture(itemName),
+            new Rect(0, 0, RandomTextureGenerator.textureSize.x, RandomTextureGenerator.textureSize.y),
+            new Vector2(0.5f, 0.5f),
+            16f // pixels per unit
+        );
+    }
+
+
+    public virtual void Use() {Debug.Log(itemName + " was used");}
 }

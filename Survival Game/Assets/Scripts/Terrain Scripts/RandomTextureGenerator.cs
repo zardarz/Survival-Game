@@ -4,13 +4,23 @@ public class RandomTextureGenerator : MonoBehaviour
 {
 
     public static int amountOfUniqueRandomTextures = 10;
-
     public static Vector2Int textureSize = new Vector2Int(16,16);
     public static Texture2D[] randomTextures;
 
-    void Start() {
+    [Header("Texture Colors")]
+    [SerializeField] private Color grassColor;
+    [SerializeField] private Color stoneColor;
+
+    public static Texture2D[] grassTextures;
+    public static Texture2D[] stoneTextures;
+
+    void Awake() {
         randomTextures = new Texture2D[amountOfUniqueRandomTextures];
         GenerateRandomTextures();
+
+        // generate all of the textures for the world
+        grassTextures = GetRandomTextures(grassColor);
+        stoneTextures = GetRandomTextures(stoneColor);
     }
 
     private void GenerateRandomTextures() {
@@ -63,7 +73,7 @@ public class RandomTextureGenerator : MonoBehaviour
         return newTexture;
     }
 
-    public static Texture2D GetRandomTexture(Color color, int index) {
+    private static Texture2D GetRandomTexture(Color color, int index) {
         Texture2D randomTexture = randomTextures[index]; // get a random gray scale texture
 
         Texture2D newTexture = new Texture2D(textureSize.x, textureSize.y);
@@ -95,4 +105,16 @@ public class RandomTextureGenerator : MonoBehaviour
 
         return newTextures;
     }
+
+    public static Texture2D GetRandomGrassTexture() { return grassTextures[Random.Range(0,amountOfUniqueRandomTextures)];} // returns random grass texture
+    public static Texture2D GetRandomStoneTexture() { return stoneTextures[Random.Range(0,amountOfUniqueRandomTextures)];} // returns random stone texture
+
+
+    public static Texture2D GetRandomTexture(string name) {
+        if(name.Equals("Grass")) {return GetRandomGrassTexture();}
+        if(name.Equals("Stone")) {return GetRandomStoneTexture();}
+
+        return GetRandomTexture(new Color(1f,1f,1f));
+    }
+
 }

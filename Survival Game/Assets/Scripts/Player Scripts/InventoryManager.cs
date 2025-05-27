@@ -15,8 +15,15 @@ public class InventoryManager : MonoBehaviour
 
     private Vector2Int inventorySize = new Vector2Int(4,6);
 
+    public Item testItem;
+
+    public Placeable testPlaceable;
+
     void Start() {
         items = new Item[inventorySize.x * inventorySize.y];
+
+        hotBarItems[0] = Instantiate(testItem);
+        hotBarItems[1] = Instantiate(testPlaceable);
     }
 
     void Update() {
@@ -42,6 +49,8 @@ public class InventoryManager : MonoBehaviour
         if(Input.GetKeyDown(KeyCode.Alpha4)) {slotSelected = 4;} // pressed four
         if(Input.GetKeyDown(KeyCode.Alpha5)) {slotSelected = 5;} // pressed five
         if(Input.GetKeyDown(KeyCode.Alpha6)) {slotSelected = 6;} // pressed six
+
+        if(Input.GetMouseButtonDown(0)) {itemSelected.Use();}
     }
 
     private void LoopSelectedSlot() {
@@ -75,13 +84,24 @@ public class InventoryManager : MonoBehaviour
         foreach (Transform child in hotBarGO.transform) { // go for each child in the hot bar gameobject
 
             Image childImage = child.GetComponent<Image>(); // get the image of the child
+            Item currentItem = hotBarItems[i];
 
-            if(hotBarItems[i] != null) { // if there is an item in the hotbar coresponding with the image
-                childImage.enabled = true; // we set the image to be active 
-                childImage.sprite = hotBarItems[i].GetSprite(); // set the image to the item's sprite
-            } else {
-                childImage.enabled = false; // if it is not we set the image to be inactive
+            if(currentItem == null) { // if there is no item there
+                childImage.enabled = false; // image is disabled
+                i++; // and we continue
+                continue;
             }
+
+
+
+            if(currentItem.GetGeneratedSprite() && !currentItem.GetSpriteWasGenerated()) { // if the item's sprite should be generated we genrate it
+                currentItem.GenerateSprite();
+                currentItem.SpriteWasGenerated();
+            }
+
+
+            childImage.enabled = true; // we set the image to be active 
+            childImage.sprite = currentItem.GetSprite(); // set the image to the item's sprite
 
             i++;
         }
