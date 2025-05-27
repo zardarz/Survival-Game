@@ -2435,7 +2435,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   items: []
   hotBarItems:
-  - {fileID: 11400000, guid: ee9c948dbf81d451c8f2181175249916, type: 2}
+  - {fileID: 0}
   - {fileID: 0}
   - {fileID: 0}
   - {fileID: 0}
@@ -2444,6 +2444,8 @@ MonoBehaviour:
   hotBarGO: {fileID: 1715273000}
   slotSelected: 1
   hand: {fileID: 888328316}
+  testItem: {fileID: 11400000, guid: ee9c948dbf81d451c8f2181175249916, type: 2}
+  testPlaceable: {fileID: 0}
 --- !u!1 &2136324950
 GameObject:
   m_ObjectHideFlags: 0
