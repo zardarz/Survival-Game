@@ -114,7 +114,16 @@ public class RandomTextureGenerator : MonoBehaviour
         if(name.Equals("Grass")) {return GetRandomGrassTexture();}
         if(name.Equals("Stone")) {return GetRandomStoneTexture();}
 
-        return GetRandomTexture(new Color(1f,1f,1f));
+        return null;
+    }
+
+    public static Sprite TextureToSprite(Texture2D texture) {
+        return Sprite.Create(
+            texture,
+            new Rect(0, 0, textureSize.x, textureSize.y),
+            new Vector2(0.5f, 0.5f),
+            16f // pixels per unit
+        );
     }
 
 }
