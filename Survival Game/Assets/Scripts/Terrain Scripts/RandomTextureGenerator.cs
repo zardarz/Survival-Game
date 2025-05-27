@@ -3,7 +3,7 @@ using UnityEngine;
 public class RandomTextureGenerator : MonoBehaviour
 {
 
-    private static int amountOfUniqueRandomTextures = 10;
+    public static int amountOfUniqueRandomTextures = 10;
 
     public static Vector2Int textureSize = new Vector2Int(16,16);
     public static Texture2D[] randomTextures;
@@ -15,7 +15,6 @@ public class RandomTextureGenerator : MonoBehaviour
 
     private void GenerateRandomTextures() {
         for(int i = 0; i < amountOfUniqueRandomTextures; i++) {
-            Debug.Log("Random texture generated");
             randomTextures[i] = GenerateRandomTexture(textureSize.x, textureSize.y);
         }
     }
@@ -61,6 +60,39 @@ public class RandomTextureGenerator : MonoBehaviour
 
         newTexture.Apply(); // apply the texture
 
-        return randomTexture;
+        return newTexture;
+    }
+
+    public static Texture2D GetRandomTexture(Color color, int index) {
+        Texture2D randomTexture = randomTextures[index]; // get a random gray scale texture
+
+        Texture2D newTexture = new Texture2D(textureSize.x, textureSize.y);
+
+        for(int x = 0; x < textureSize.x; x++) {
+            for(int y = 0; y < textureSize.y; y++) {
+                Color randomTextureColor = randomTexture.GetPixel(x,y); // get the color from the gray scale texture
+
+                Color newColor = new Color(color.r * randomTextureColor.r, color.g * randomTextureColor.g, color.b * randomTextureColor.b); // gray scale color * desired color
+
+                newTexture.SetPixel(x, y, newColor); // set that pixel
+            }
+        }
+
+        newTexture.filterMode = FilterMode.Point; // make the texture not look like poop
+        newTexture.wrapMode = TextureWrapMode.Clamp;
+
+        newTexture.Apply(); // apply the texture
+
+        return newTexture;
+    }
+
+    public static Texture2D[] GetRandomTextures(Color color) {
+        Texture2D[] newTextures = new Texture2D[amountOfUniqueRandomTextures];
+
+        for(int i = 0; i < amountOfUniqueRandomTextures; i++) {
+            newTextures[i] = GetRandomTexture(color, i);
+        }
+
+        return newTextures;
     }
 }

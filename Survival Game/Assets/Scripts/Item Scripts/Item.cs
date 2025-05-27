@@ -11,7 +11,7 @@ public class Item : ScriptableObject
 
     [SerializeField] private bool showWhenHolding;
 
-    private int quantity;
+    private int quantity = 1;
 
     public int inventorySlot;
 

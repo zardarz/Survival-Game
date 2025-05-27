@@ -1,3 +1,5 @@
+using System;
+using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -15,10 +17,12 @@ public class InventoryManager : MonoBehaviour
 
     void Start() {
         items = new Item[inventorySize.x * inventorySize.y];
-        SetHotBarSprites();
     }
 
     void Update() {
+        SetHotBarSprites();
+        SetHotBarCounts();
+
         HandleHotBarInputs();
         LoopSelectedSlot();
 
@@ -68,7 +72,7 @@ public class InventoryManager : MonoBehaviour
     private void SetHotBarSprites() {
         int i = 0;
 
-        foreach (Transform child in hotBarGO.transform) { // got for each child in the hot bar gameobject
+        foreach (Transform child in hotBarGO.transform) { // go for each child in the hot bar gameobject
 
             Image childImage = child.GetComponent<Image>(); // get the image of the child
 
@@ -78,6 +82,28 @@ public class InventoryManager : MonoBehaviour
             } else {
                 childImage.enabled = false; // if it is not we set the image to be inactive
             }
+
+            i++;
+        }
+    }
+
+    private void SetHotBarCounts() {
+        int i = 0;
+
+        foreach (Transform child in hotBarGO.transform) { // go for each child in the hot bar gameobject
+
+            if(hotBarItems[i] == null) { // if there is no item in the slot
+                child.GetChild(0).GetComponent<TMP_Text>().text = ""; // set the text to be nothing
+                i++;  // continue to the next child
+                continue;
+            }
+
+            if(hotBarItems[i].GetQuantity() == 0) { // if there is no count, we set the text to be nothing
+                child.GetChild(0).GetComponent<TMP_Text>().text = "";
+            } else {
+                child.GetChild(0).GetComponent<TMP_Text>().text = hotBarItems[i].GetQuantity().ToString(); // get the child (which is a text mesh pro) and set the text to the count of the item
+            }
+
 
             i++;
         }

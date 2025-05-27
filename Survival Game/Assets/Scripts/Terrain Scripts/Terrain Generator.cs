@@ -8,9 +8,13 @@ public class TerrainGenerator : MonoBehaviour
 
     [Header("Tile Colors / Tiles")]
 
-    [SerializeField] private Color GrassColor;
+    [SerializeField] private Color grassColor;
+
+    private Texture2D[] uniqueGrassTextures;
 
     void Start() {
+        uniqueGrassTextures = RandomTextureGenerator.GetRandomTextures(grassColor);
+
         for(int x = -50; x < 50; x++) {
             for(int y = -50; y < 50; y++) {
                 PlaceGrass(x, y);
@@ -22,7 +26,7 @@ public class TerrainGenerator : MonoBehaviour
         Tile grassTile = ScriptableObject.CreateInstance<Tile>(); // make a new tile
 
         Sprite grassSprite = Sprite.Create( // make a new sprite
-            RandomTextureGenerator.GetRandomTexture(GrassColor),
+            uniqueGrassTextures[Random.Range(0,RandomTextureGenerator.amountOfUniqueRandomTextures)],
             new Rect(0, 0, RandomTextureGenerator.textureSize.x, RandomTextureGenerator.textureSize.y),
             new Vector2(0.5f, 0.5f),
             16f // pixels per unit
