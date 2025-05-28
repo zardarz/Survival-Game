@@ -120,7 +120,14 @@ public class RandomTextureGenerator : MonoBehaviour
     public static Sprite GetRandomGrassSprite() { return grassSprites[Random.Range(0,amountOfUniqueRandomTextures)];} // returns random grass texture
     public static Sprite GetRandomStoneSprite() { return stoneSprites[Random.Range(0,amountOfUniqueRandomTextures)];} // returns random stone texture
 
-    private static Sprite[] GetGrassSprites() {
+    public static Sprite[] GetSprites(string name) {
+        if(name.Equals("Grass")) {return GetGrassSprites();}
+        if(name.Equals("Stone")) {return GetStoneSprites();}
+
+        return null;
+    }
+
+    public static Sprite[] GetGrassSprites() {
         Sprite[] sprites = new Sprite[amountOfUniqueRandomTextures];
 
         for(int i = 0; i < amountOfUniqueRandomTextures; i++) {
@@ -130,7 +137,7 @@ public class RandomTextureGenerator : MonoBehaviour
         return sprites;
     }
 
-    private static Sprite[] GetStoneSprites() {
+    public static Sprite[] GetStoneSprites() {
         Sprite[] sprites = new Sprite[amountOfUniqueRandomTextures];
 
         for(int i = 0; i < amountOfUniqueRandomTextures; i++) {

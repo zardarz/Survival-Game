@@ -17,6 +17,8 @@ public class Item : ScriptableObject
 
     public int quantity = 1;
 
+    [SerializeField] private int maxStack;
+
     public string GetName() {
         return itemName;
     }

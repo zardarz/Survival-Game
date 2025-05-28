@@ -399,6 +399,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   target: {fileID: 1972522980}
+  minZoom: 2
+  maxZoom: 10
 --- !u!1 &619394800
 GameObject:
   m_ObjectHideFlags: 0
@@ -529,7 +531,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0cd44c1031e13a943bb63640046fad76, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_UiScaleMode: 0
+  m_UiScaleMode: 1
   m_ReferencePixelsPerUnit: 100
   m_ScaleFactor: 1
   m_ReferenceResolution: {x: 800, y: 600}
@@ -1978,9 +1980,9 @@ RectTransform:
   - {fileID: 965507499}
   m_Father: {fileID: 622884449}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0.5, y: 0.5}
-  m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 0, y: -242}
+  m_AnchorMin: {x: 0.5, y: 0}
+  m_AnchorMax: {x: 0.5, y: 0}
+  m_AnchoredPosition: {x: 0, y: 35.399994}
   m_SizeDelta: {x: 687.5, y: 125}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1715273002
@@ -2443,7 +2445,7 @@ MonoBehaviour:
   hotBarGO: {fileID: 1715273000}
   slotSelected: 1
   hand: {fileID: 888328316}
-  testItem: {fileID: 11400000, guid: ee9c948dbf81d451c8f2181175249916, type: 2}
+  testItem: {fileID: 11400000, guid: e9e7722e79d8d4f41b5e764c9e31df0e, type: 2}
   testPlaceable: {fileID: 11400000, guid: 99098a769b99449babae04f47e81edbd, type: 2}
 --- !u!1 &2136324950
 GameObject:

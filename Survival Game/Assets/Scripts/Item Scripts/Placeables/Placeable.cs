@@ -1,9 +1,11 @@
-using System;
 using UnityEngine;
+using UnityEngine.Tilemaps;
 
 [CreateAssetMenu(fileName = "New Placeable", menuName = "Placeable")]
 public class Placeable : Item
 {
+    [SerializeField] private Tile tile;
+
     public override void Use() {
         quantity--;
 
@@ -12,6 +14,6 @@ public class Placeable : Item
         mousePos.x = Mathf.Floor(mousePos.x);
         mousePos.y = Mathf.Floor(mousePos.y);
 
-        TerrainGenerator.PlaceBlock(GetSprite(), (int) mousePos.x, (int) mousePos.y, GetName());
+        TerrainGenerator.PlaceBlock(tile, (int) mousePos.x, (int) mousePos.y, GetName());
     }
 }
