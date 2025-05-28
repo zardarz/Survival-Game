@@ -20,10 +20,8 @@ public class TerrainGenerator : MonoBehaviour
     private void PlaceGrass(int x, int y) {
         Tile grassTile = ScriptableObject.CreateInstance<Tile>(); // make a new tile
 
-
-        Sprite grassSprite = RandomTextureGenerator.TextureToSprite(RandomTextureGenerator.GetRandomGrassTexture());
-            
-
+        Sprite grassSprite = RandomTextureGenerator.GetRandomGrassSprite();
+        
         grassTile.sprite = grassSprite; // apply the sprite to the tile
 
         tilemap.SetTile(new Vector3Int(x,y,0), grassTile); // place the tile
@@ -34,8 +32,8 @@ public class TerrainGenerator : MonoBehaviour
 
         Tile newTile = ScriptableObject.CreateInstance<Tile>();
 
-        if(RandomTextureGenerator.GetRandomTexture(blockName) == null) {newTile.sprite = sprite;} else 
-        {newTile.sprite = RandomTextureGenerator.TextureToSprite(RandomTextureGenerator.GetRandomTexture(blockName));}
+        if(RandomTextureGenerator.GetRandomSprite(blockName) == null) {newTile.sprite = sprite;} else 
+        {newTile.sprite = RandomTextureGenerator.GetRandomSprite(blockName);}
 
 
         tilemap.SetTile(pos, newTile);

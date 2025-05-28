@@ -12,7 +12,10 @@ public class RandomTextureGenerator : MonoBehaviour
     [SerializeField] private Color stoneColor;
 
     public static Texture2D[] grassTextures;
+    public static Sprite[] grassSprites;
+
     public static Texture2D[] stoneTextures;
+    public static Sprite[] stoneSprites;
 
     void Awake() {
         randomTextures = new Texture2D[amountOfUniqueRandomTextures];
@@ -21,6 +24,10 @@ public class RandomTextureGenerator : MonoBehaviour
         // generate all of the textures for the world
         grassTextures = GetRandomTextures(grassColor);
         stoneTextures = GetRandomTextures(stoneColor);
+
+        // generate all of the sprites for the world
+        grassSprites = GetGrassSprites();
+        stoneSprites = GetStoneSprites();
     }
 
     private void GenerateRandomTextures() {
@@ -110,9 +117,32 @@ public class RandomTextureGenerator : MonoBehaviour
     public static Texture2D GetRandomStoneTexture() { return stoneTextures[Random.Range(0,amountOfUniqueRandomTextures)];} // returns random stone texture
 
 
-    public static Texture2D GetRandomTexture(string name) {
-        if(name.Equals("Grass")) {return GetRandomGrassTexture();}
-        if(name.Equals("Stone")) {return GetRandomStoneTexture();}
+    public static Sprite GetRandomGrassSprite() { return grassSprites[Random.Range(0,amountOfUniqueRandomTextures)];} // returns random grass texture
+    public static Sprite GetRandomStoneSprite() { return stoneSprites[Random.Range(0,amountOfUniqueRandomTextures)];} // returns random stone texture
+
+    private static Sprite[] GetGrassSprites() {
+        Sprite[] sprites = new Sprite[amountOfUniqueRandomTextures];
+
+        for(int i = 0; i < amountOfUniqueRandomTextures; i++) {
+            sprites[i] = TextureToSprite(grassTextures[i]);
+        }
+
+        return sprites;
+    }
+
+    private static Sprite[] GetStoneSprites() {
+        Sprite[] sprites = new Sprite[amountOfUniqueRandomTextures];
+
+        for(int i = 0; i < amountOfUniqueRandomTextures; i++) {
+            sprites[i] = TextureToSprite(stoneTextures[i]);
+        }
+
+        return sprites;
+    }
+
+    public static Sprite GetRandomSprite(string name) {
+        if(name.Equals("Grass")) {return GetRandomGrassSprite();}
+        if(name.Equals("Stone")) {return GetRandomStoneSprite();}
 
         return null;
     }

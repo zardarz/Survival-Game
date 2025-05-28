@@ -54,12 +54,7 @@ public class Item : ScriptableObject
     }
 
     public void GenerateSprite() {
-        sprite = Sprite.Create(
-            RandomTextureGenerator.GetRandomTexture(itemName),
-            new Rect(0, 0, RandomTextureGenerator.textureSize.x, RandomTextureGenerator.textureSize.y),
-            new Vector2(0.5f, 0.5f),
-            16f // pixels per unit
-        );
+        sprite = RandomTextureGenerator.GetRandomSprite(itemName);
     }
 
     public virtual void Use() {Debug.Log(itemName + " was used");}
