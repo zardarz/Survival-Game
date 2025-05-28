@@ -1,4 +1,5 @@
 using UnityEngine;
+using System.Collections.Generic;
 
 public class RandomTextureGenerator : MonoBehaviour
 {
@@ -10,24 +11,29 @@ public class RandomTextureGenerator : MonoBehaviour
     [Header("Texture Colors")]
     [SerializeField] private Color grassColor;
     [SerializeField] private Color stoneColor;
+    [SerializeField] private Color testColor;
 
-    public static Texture2D[] grassTextures;
-    public static Sprite[] grassSprites;
+    [SerializeField] private string[] spriteNames;
+    
 
-    public static Texture2D[] stoneTextures;
-    public static Sprite[] stoneSprites;
+    private Dictionary<string, Color> colors;
+
+    private static Dictionary<string, Texture2D[]> textures;
+
+    private static Dictionary<string, Sprite[]> sprites;
 
     void Awake() {
         randomTextures = new Texture2D[amountOfUniqueRandomTextures];
         GenerateRandomTextures();
 
+        // Set all of the colors for the world
+        SetColors();
+
         // generate all of the textures for the world
-        grassTextures = GetRandomTextures(grassColor);
-        stoneTextures = GetRandomTextures(stoneColor);
+        SetTextures();
 
         // generate all of the sprites for the world
-        grassSprites = GetGrassSprites();
-        stoneSprites = GetStoneSprites();
+        SetSprites();
     }
 
     private void GenerateRandomTextures() {
@@ -57,30 +63,7 @@ public class RandomTextureGenerator : MonoBehaviour
         return randomTexture;
     }
 
-    public static Texture2D GetRandomTexture(Color color) {
-        Texture2D randomTexture = randomTextures[Random.Range(0, amountOfUniqueRandomTextures)]; // get a random gray scale texture
-
-        Texture2D newTexture = new Texture2D(textureSize.x, textureSize.y);
-
-        for(int x = 0; x < textureSize.x; x++) {
-            for(int y = 0; y < textureSize.y; y++) {
-                Color randomTextureColor = randomTexture.GetPixel(x,y); // get the color from the gray scale texture
-
-                Color newColor = new Color(color.r * randomTextureColor.r, color.g * randomTextureColor.g, color.b * randomTextureColor.b); // gray scale color * desired color
-
-                newTexture.SetPixel(x, y, newColor); // set that pixel
-            }
-        }
-
-        newTexture.filterMode = FilterMode.Point; // make the texture not look like poop
-        newTexture.wrapMode = TextureWrapMode.Clamp;
-
-        newTexture.Apply(); // apply the texture
-
-        return newTexture;
-    }
-
-    private static Texture2D GetRandomTexture(Color color, int index) {
+    private Texture2D GetRandomTexture(Color color, int index) {
         Texture2D randomTexture = randomTextures[index]; // get a random gray scale texture
 
         Texture2D newTexture = new Texture2D(textureSize.x, textureSize.y);
@@ -103,7 +86,7 @@ public class RandomTextureGenerator : MonoBehaviour
         return newTexture;
     }
 
-    public static Texture2D[] GetRandomTextures(Color color) {
+    private Texture2D[] GetRandomTextures(Color color) {
         Texture2D[] newTextures = new Texture2D[amountOfUniqueRandomTextures];
 
         for(int i = 0; i < amountOfUniqueRandomTextures; i++) {
@@ -113,48 +96,50 @@ public class RandomTextureGenerator : MonoBehaviour
         return newTextures;
     }
 
-    public static Texture2D GetRandomGrassTexture() { return grassTextures[Random.Range(0,amountOfUniqueRandomTextures)];} // returns random grass texture
-    public static Texture2D GetRandomStoneTexture() { return stoneTextures[Random.Range(0,amountOfUniqueRandomTextures)];} // returns random stone texture
+    private void SetColors() {
+        colors.Add(spriteNames[0], grassColor);
+        colors.Add(spriteNames[1], stoneColor);
+        colors.Add(spriteNames[2], testColor);
+    }
 
+    private void SetTextures() {
+        for(int i = 0; i < textures.Count; i++) {
+            textures.Add(spriteNames[i], GetRandomTextures(colors[spriteNames[i]]));
+        }
+    }
 
-    public static Sprite GetRandomGrassSprite() { return grassSprites[Random.Range(0,amountOfUniqueRandomTextures)];} // returns random grass texture
-    public static Sprite GetRandomStoneSprite() { return stoneSprites[Random.Range(0,amountOfUniqueRandomTextures)];} // returns random stone texture
+    private void SetSprites() {
+        for(int i = 0; i < sprites.Count; i++) {
+            sprites.Add(spriteNames[i], GenerateSprites(spriteNames[i]));
+        }
+    }
+
+    private static Sprite[] GenerateSprites(string name) {
+        Sprite[] generatedSprites = new Sprite[amountOfUniqueRandomTextures];
+        Texture2D[] textureToBeConverted = textures[name];
+
+        for(int i = 0; i < amountOfUniqueRandomTextures; i++) {
+            Debug.Log(textureToBeConverted[i]);
+
+            generatedSprites[i] = TextureToSprite(textureToBeConverted[i]);
+        }
+
+        return generatedSprites;
+    }
 
     public static Sprite[] GetSprites(string name) {
-        if(name.Equals("Grass")) {return GetGrassSprites();}
-        if(name.Equals("Stone")) {return GetStoneSprites();}
+        if(sprites.TryGetValue(name, out Sprite[] result)) {return result;}
 
         return null;
-    }
-
-    public static Sprite[] GetGrassSprites() {
-        Sprite[] sprites = new Sprite[amountOfUniqueRandomTextures];
-
-        for(int i = 0; i < amountOfUniqueRandomTextures; i++) {
-            sprites[i] = TextureToSprite(grassTextures[i]);
-        }
-
-        return sprites;
-    }
-
-    public static Sprite[] GetStoneSprites() {
-        Sprite[] sprites = new Sprite[amountOfUniqueRandomTextures];
-
-        for(int i = 0; i < amountOfUniqueRandomTextures; i++) {
-            sprites[i] = TextureToSprite(stoneTextures[i]);
-        }
-
-        return sprites;
     }
 
     public static Sprite GetRandomSprite(string name) {
-        if(name.Equals("Grass")) {return GetRandomGrassSprite();}
-        if(name.Equals("Stone")) {return GetRandomStoneSprite();}
+        if(sprites.TryGetValue(name, out Sprite[] result)) {return result[Random.Range(0,amountOfUniqueRandomTextures)];}
 
         return null;
     }
 
-    public static Sprite TextureToSprite(Texture2D texture) {
+    private static Sprite TextureToSprite(Texture2D texture) {
         return Sprite.Create(
             texture,
             new Rect(0, 0, textureSize.x, textureSize.y),

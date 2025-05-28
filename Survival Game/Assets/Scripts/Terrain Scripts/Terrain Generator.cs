@@ -18,7 +18,7 @@ public class TerrainGenerator : MonoBehaviour
 
         for(int x = -50; x < 50; x++) {
             for(int y = -50; y < 50; y++) {
-                PlaceGrass(x, y);
+                PlaceBlock(x, y, "Grass");
             }
         }
     }
@@ -38,16 +38,6 @@ public class TerrainGenerator : MonoBehaviour
         return tiles;
     }
 
-    private void PlaceGrass(int x, int y) {
-        Tile grassTile = ScriptableObject.CreateInstance<Tile>(); // make a new tile
-
-        Sprite grassSprite = RandomTextureGenerator.GetRandomGrassSprite();
-        
-        grassTile.sprite = grassSprite; // apply the sprite to the tile
-
-        tilemap.SetTile(new Vector3Int(x,y,0), grassTile); // place the tile
-    }
-
     public static void PlaceBlock(Tile tile, int x, int y, string blockName) {
         Vector3Int pos = new Vector3Int(x, y, 0);
 
@@ -57,6 +47,12 @@ public class TerrainGenerator : MonoBehaviour
 
             tilemap.SetTile(pos, tile);
         }
+    }
+
+    public static void PlaceBlock(int x, int y, string blockName) {
+        Vector3Int pos = new Vector3Int(x, y, 0);
+
+        tilemap.SetTile(pos, GetRandomTile(blockName));
     }
 
     private static Tile GetRandomTile(string name) {

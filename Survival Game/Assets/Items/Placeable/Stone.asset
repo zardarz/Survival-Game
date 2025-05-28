@@ -18,3 +18,5 @@ MonoBehaviour:
   showWhenHolding: 1
   generatedSprite: 1
   quantity: 1
+  maxStack: 100
+  tile: {fileID: 0}

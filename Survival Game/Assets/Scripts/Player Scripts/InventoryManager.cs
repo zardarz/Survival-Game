@@ -18,12 +18,14 @@ public class InventoryManager : MonoBehaviour
 
     public Placeable testPlaceable;
 
+    public Placeable testTestPlaceable;
+
     void Start() {
         items = new Item[inventorySize.x * inventorySize.y];
 
         hotBarItems[0] = Instantiate(testItem);
         hotBarItems[1] = Instantiate(testPlaceable);
-        hotBarItems[1].quantity = 200;
+        hotBarItems[2] = Instantiate(testTestPlaceable);
     }
 
     void Update() {
@@ -32,8 +34,6 @@ public class InventoryManager : MonoBehaviour
 
         HandleHotBarInputs();
         LoopSelectedSlot();
-
-        if(hotBarItems[slotSelected - 1] == null) {hideSelectedItem(); return;} // if there is no item in the slected slot we return
 
         SetItemSelected();
         TryToShowSelectedItem();
@@ -50,7 +50,7 @@ public class InventoryManager : MonoBehaviour
         if(Input.GetKeyDown(KeyCode.Alpha5)) {slotSelected = 5;} // pressed five
         if(Input.GetKeyDown(KeyCode.Alpha6)) {slotSelected = 6;} // pressed six
 
-        if(Input.GetMouseButtonDown(0)) {itemSelected.Use();}
+        if(Input.GetMouseButtonDown(0) && itemSelected != null) {itemSelected.Use();}
     }
 
     private void LoopSelectedSlot() {
@@ -59,10 +59,14 @@ public class InventoryManager : MonoBehaviour
     }
 
     private void SetItemSelected() {
-        itemSelected = hotBarItems[slotSelected - 1]; // get the selected item
+        if(hotBarItems[slotSelected - 1] == null) {itemSelected = null; hideSelectedItem();} else {
+            itemSelected = hotBarItems[slotSelected - 1]; // get the selected item
+        }
     }
 
     private void TryToShowSelectedItem() {
+        if(itemSelected == null) {return;}
+
         if(Input.GetMouseButton(0) || itemSelected.GetShowWhenHolding()) { // if the mouse button is down or the item should be shown we show it
             showSelectedItem();
         } else { // else we hide it
