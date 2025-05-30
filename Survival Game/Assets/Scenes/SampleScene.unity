@@ -1283,13 +1283,15 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9120d9533a2fb4a1b911f59268d54c45, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  grassColor: {r: 0.06935414, g: 0.33962262, b: 0.008009966, a: 1}
-  stoneColor: {r: 0.26415092, g: 0.26041293, b: 0.26041293, a: 1}
-  testColor: {r: 1, g: 0.21226418, b: 0.21226418, a: 1}
-  spriteNames:
-  - Grass
-  - Stone
-  - Test
+  generatedTileEntries:
+  - tileName: Grass
+    tileColor: {r: 0, g: 0.3679245, b: 0.010433334, a: 1}
+  - tileName: Stone
+    tileColor: {r: 0.1792453, g: 0.1792453, b: 0.1792453, a: 1}
+  - tileName: Test
+    tileColor: {r: 1, g: 0, b: 0, a: 1}
+  - tileName: Another test
+    tileColor: {r: 0.3329082, g: 0.4811321, b: 0.3290762, a: 1}
 --- !u!1 &965507498
 GameObject:
   m_ObjectHideFlags: 0
@@ -2528,7 +2530,7 @@ MonoBehaviour:
   hand: {fileID: 888328316}
   testItem: {fileID: 11400000, guid: e9e7722e79d8d4f41b5e764c9e31df0e, type: 2}
   testPlaceable: {fileID: 11400000, guid: 99098a769b99449babae04f47e81edbd, type: 2}
-  testTestPlaceable: {fileID: 0}
+  testTestPlaceable: {fileID: 11400000, guid: 8cf155a6bfd8c4d19b8598bd82b48f9b, type: 2}
 --- !u!1 &2136324950
 GameObject:
   m_ObjectHideFlags: 0

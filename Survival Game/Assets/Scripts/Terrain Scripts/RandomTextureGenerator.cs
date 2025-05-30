@@ -8,26 +8,15 @@ public class RandomTextureGenerator : MonoBehaviour
     public static Vector2Int textureSize = new Vector2Int(16,16);
     public static Texture2D[] randomTextures;
 
-    [Header("Texture Colors")]
-    [SerializeField] private Color grassColor;
-    [SerializeField] private Color stoneColor;
-    [SerializeField] private Color testColor;
+    [SerializeField] public GeneratedTileEntry[] generatedTileEntries;
 
-    [SerializeField] private string[] spriteNames;
-    
+    private static Dictionary<string, Texture2D[]> textures = new Dictionary<string, Texture2D[]>();
 
-    private Dictionary<string, Color> colors;
-
-    private static Dictionary<string, Texture2D[]> textures;
-
-    private static Dictionary<string, Sprite[]> sprites;
+    private static Dictionary<string, Sprite[]> sprites = new Dictionary<string, Sprite[]>();
 
     void Awake() {
         randomTextures = new Texture2D[amountOfUniqueRandomTextures];
         GenerateRandomTextures();
-
-        // Set all of the colors for the world
-        SetColors();
 
         // generate all of the textures for the world
         SetTextures();
@@ -96,21 +85,16 @@ public class RandomTextureGenerator : MonoBehaviour
         return newTextures;
     }
 
-    private void SetColors() {
-        colors.Add(spriteNames[0], grassColor);
-        colors.Add(spriteNames[1], stoneColor);
-        colors.Add(spriteNames[2], testColor);
-    }
 
     private void SetTextures() {
-        for(int i = 0; i < textures.Count; i++) {
-            textures.Add(spriteNames[i], GetRandomTextures(colors[spriteNames[i]]));
+        for(int i = 0; i < generatedTileEntries.Length; i++) {
+            textures.Add(generatedTileEntries[i].tileName, GetRandomTextures(generatedTileEntries[i].tileColor));
         }
     }
 
     private void SetSprites() {
-        for(int i = 0; i < sprites.Count; i++) {
-            sprites.Add(spriteNames[i], GenerateSprites(spriteNames[i]));
+        for(int i = 0; i < generatedTileEntries.Length; i++) {
+            sprites.Add(generatedTileEntries[i].tileName, GenerateSprites(generatedTileEntries[i].tileName));
         }
     }
 
@@ -119,8 +103,6 @@ public class RandomTextureGenerator : MonoBehaviour
         Texture2D[] textureToBeConverted = textures[name];
 
         for(int i = 0; i < amountOfUniqueRandomTextures; i++) {
-            Debug.Log(textureToBeConverted[i]);
-
             generatedSprites[i] = TextureToSprite(textureToBeConverted[i]);
         }
 

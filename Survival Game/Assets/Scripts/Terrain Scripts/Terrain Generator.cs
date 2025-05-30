@@ -1,20 +1,25 @@
+using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Tilemaps;
 
+
+[RequireComponent(typeof(RandomTextureGenerator))]
 public class TerrainGenerator : MonoBehaviour
 {
     [Header("Refrences")]
     [SerializeField] private static Tilemap tilemap;
 
-    private static Tile[] grassTiles;
+    private static Dictionary<string, Tile[]> tiles = new Dictionary<string, Tile[]>();
+
+    private RandomTextureGenerator randomTextureGenerator;
     
-    private static Tile[] stoneTiles;
     void Start() {
+
+        randomTextureGenerator = gameObject.GetComponent<RandomTextureGenerator>();
 
         tilemap = transform.GetChild(0).GetChild(0).GetComponent<Tilemap>();
 
-        grassTiles = GetTiles("Grass");
-        stoneTiles = GetTiles("Stone");
+        SetUpTiles();
 
         for(int x = -50; x < 50; x++) {
             for(int y = -50; y < 50; y++) {
@@ -56,9 +61,15 @@ public class TerrainGenerator : MonoBehaviour
     }
 
     private static Tile GetRandomTile(string name) {
-        if(name.Equals("Grass")) {return grassTiles[Random.Range(0,RandomTextureGenerator.amountOfUniqueRandomTextures)];}
-        if(name.Equals("Stone")) {return stoneTiles[Random.Range(0,RandomTextureGenerator.amountOfUniqueRandomTextures)];}
+        if(tiles.TryGetValue(name, out Tile[] result)) {return result[Random.Range(0,RandomTextureGenerator.amountOfUniqueRandomTextures)];}
 
         return null;
+    }
+
+    private void SetUpTiles() {
+        for(int i = 0; i < randomTextureGenerator.generatedTileEntries.Length; i++) {
+            string tileName = randomTextureGenerator.generatedTileEntries[i].tileName;
+            tiles.Add(tileName, GetTiles(tileName));
+        }
     }
 }
