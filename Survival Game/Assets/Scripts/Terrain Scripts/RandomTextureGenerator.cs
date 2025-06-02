@@ -36,7 +36,7 @@ public class RandomTextureGenerator : MonoBehaviour
 
         for(int x = 0; x < textureSizeX; x++) {
             for(int y = 0; y < textureSizeY; y++) {
-                float brightness = Random.Range(0.9f, 1f); // get how bright the pixel should be 
+                float brightness = Random.Range(0.85f, 1f); // get how bright the pixel should be 
 
                 Color pixelColor = new Color(brightness, brightness, brightness); // make a color based on the brightness
 
