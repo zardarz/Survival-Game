@@ -18,6 +18,8 @@ public class InventoryManager : MonoBehaviour
 
     private Vector2Int inventorySize = new Vector2Int(3,6);
 
+    private int totalSlots;
+
     [SerializeField] private GameObject selectedItemGO;
     private bool hasSelectedItemOnMouse;
     private bool inventoryIsOpened;
@@ -31,7 +33,9 @@ public class InventoryManager : MonoBehaviour
     public Placeable testTestPlaceable;
 
     void Start() {
-        inventoryItems = new Item[inventorySize.x * inventorySize.y];
+        totalSlots = inventorySize.x * inventorySize.y;
+
+        inventoryItems = new Item[totalSlots];
 
         hotBarItems[0] = Instantiate(testItem);
         hotBarItems[1] = Instantiate(testPlaceable);
@@ -68,7 +72,7 @@ public class InventoryManager : MonoBehaviour
         if(Input.GetKeyDown(KeyCode.Alpha5)) {slotSelected = 5;} // pressed five
         if(Input.GetKeyDown(KeyCode.Alpha6)) {slotSelected = 6;} // pressed six
 
-        if(Input.GetMouseButtonDown(0) && itemSelected != null) {itemSelected.Use();}
+        if(Input.GetMouseButtonDown(0) && itemSelected != null && !inventoryIsOpened) {itemSelected.Use();}
     }
 
     private void LoopSelectedSlot() {
@@ -226,22 +230,28 @@ public class InventoryManager : MonoBehaviour
         GameObject clickedObj = EventSystem.current.currentSelectedGameObject.transform.parent.gameObject;
         string numberString = clickedObj.name.Substring(11);
         bool isInInventory = false;
+        Image selectedItemImage = selectedItemGO.GetComponent<Image>();
 
         if(numberString[0].Equals('l')) {numberString = numberString.Substring(4); isInInventory = true;}
 
         int slot = int.Parse(numberString);
 
+        if(hasSelectedItemOnMouse) {
+            if(!isInInventory) {
+                SwapItems(prevSlotSelected, slot + totalSlots - 1);
+            } else {
+                SwapItems(prevSlotSelected, slot - 1);
+            }
+            selectedItemImage.gameObject.SetActive(false);
+            return;
+        }
 
         if(!isInInventory && !inventoryIsOpened) {slotSelected = slot; return;}
 
-        Image selectedItemImage = selectedItemGO.GetComponent<Image>();
-        Item selectedItem = inventoryItems[slot - 1];
+        Item selectedItem = null;
 
-        if(hasSelectedItemOnMouse) {
-            SwapItems(prevSlotSelected, slot - 1);
-            selectedItemImage.gameObject.SetActive(true);
-            return;
-        }
+        if(isInInventory) {selectedItem = inventoryItems[slot - 1];} else
+        {selectedItem = hotBarItems[slot - 1];}
 
         if(selectedItem != null) { 
 
@@ -258,15 +268,57 @@ public class InventoryManager : MonoBehaviour
 
         if(!inventoryIsOpened || selectedItem == null) {selectedItemImage.gameObject.SetActive(false);}
 
-        prevSlotSelected = slot - 1;
+        if(isInInventory) {
+            prevSlotSelected = slot - 1;
+        } else {
+            prevSlotSelected = slot + totalSlots - 1;
+        }
 
     }
 
     private void SwapItems(int prevSlot, int slot) {
-        Item temp = inventoryItems[prevSlot];
+        Item temp = null;
 
-        inventoryItems[prevSlot] = inventoryItems[slot];
-        inventoryItems[slot] = temp;
+        bool prevSlotIsInInventory = !(prevSlot >= totalSlots);
+        bool slotIsInInventory = !(slot >= totalSlots);
+
+        if(!prevSlotIsInInventory) {prevSlot -= totalSlots;}
+        if(!slotIsInInventory) {slot -= totalSlots;}
+
+        Debug.Log("Prev Slot is in Inventory: " + prevSlotIsInInventory + "\nSlot is in Inventory: " + slotIsInInventory);
+        Debug.Log(prevSlot + " to " + slot);
+
+
+        if(prevSlotIsInInventory && slotIsInInventory) {
+            // both slots are in the inventory
+
+            
+            temp = inventoryItems[prevSlot];
+
+            inventoryItems[prevSlot] = inventoryItems[slot];
+            inventoryItems[slot] = temp;
+        } else if (!prevSlotIsInInventory && slotIsInInventory) {
+            // prev slot is in hotbar
+
+            temp = hotBarItems[prevSlot];
+
+            hotBarItems[prevSlot] = inventoryItems[slot];
+            inventoryItems[slot] = temp;
+        } else if (prevSlotIsInInventory && !slotIsInInventory) {
+            // slot is in hotbar
+
+            temp = inventoryItems[prevSlot];
+
+            inventoryItems[prevSlot] = hotBarItems[slot];
+            hotBarItems[slot] = temp;
+        } else {
+            // both slots are in hotbar
+
+            temp = hotBarItems[prevSlot];
+
+            hotBarItems[prevSlot] = hotBarItems[slot];
+            hotBarItems[slot] = temp;
+        }
 
         hasSelectedItemOnMouse = false;
     }
