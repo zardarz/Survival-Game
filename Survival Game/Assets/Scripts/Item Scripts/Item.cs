@@ -1,3 +1,4 @@
+using System;
 using UnityEngine;
 
 [CreateAssetMenu(fileName = "New Item", menuName = "Item")]
@@ -59,5 +60,19 @@ public class Item : ScriptableObject
         sprite = RandomTextureGenerator.GetRandomSprite(itemName);
     }
 
-    public virtual void Use() {Debug.Log(itemName + " was used");}
+    public virtual void Use() {
+        Debug.Log(itemName + " was used");
+    }
+
+    public bool Equals(Item itemToCompare) {
+        return itemName.Equals(itemToCompare.GetName());
+    }
+
+    public void AddToQuantity(int num) {
+        quantity += num;
+
+        if(quantity <= 0) {
+            Destroy(this);
+        }
+    }
 }

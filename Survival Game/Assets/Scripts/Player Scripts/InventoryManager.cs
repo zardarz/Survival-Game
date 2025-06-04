@@ -6,26 +6,33 @@ using UnityEngine.EventSystems;
 
 public class InventoryManager : MonoBehaviour
 {
+    // Items in inventory/hotbar
     [SerializeField] private Item[] inventoryItems;
     [SerializeField] private GameObject inventoryGO;
     
     [SerializeField] private Item[] hotBarItems;
     [SerializeField] private GameObject hotBarGO;
 
+
+    // Showing selected item
     [SerializeField] private int slotSelected = 1;
-    private Item itemSelected;
+    private Item itemSelectedInHand;
     [SerializeField] private SpriteRenderer hand;
 
+    // Inventory settings
     private Vector2Int inventorySize = new Vector2Int(3,6);
-
     private int totalSlots;
-
-    [SerializeField] private GameObject selectedItemGO;
-    private bool hasSelectedItemOnMouse;
     private bool inventoryIsOpened;
 
-    private int prevSlotSelected;
 
+    // Inventory swapping stuff
+    [SerializeField] private GameObject selectedItemWithCursorGO;
+    private Image selectedItemWithCursorImage;
+    private TMP_Text selectedItemWithCursorCount;
+    private Item itemSelectedWithCursor;
+
+
+    // Test Items
     public Item testItem;
 
     public Placeable testPlaceable;
@@ -44,6 +51,9 @@ public class InventoryManager : MonoBehaviour
 
         inventoryItems[7] = Instantiate(testItem);
         inventoryItems[10] = Instantiate(testPlaceable);
+
+        selectedItemWithCursorImage = selectedItemWithCursorGO.GetComponent<Image>();
+        selectedItemWithCursorCount = selectedItemWithCursorGO.transform.GetChild(0).GetComponent<TMP_Text>();
     }
 
     void Update() {
@@ -59,6 +69,8 @@ public class InventoryManager : MonoBehaviour
 
         SetItemSelected();
         TryToShowSelectedItem();
+
+        SetSelectedItemWithCursorImageAndCount();
     }
 
     private void HandleHotBarInputs() {
@@ -72,7 +84,7 @@ public class InventoryManager : MonoBehaviour
         if(Input.GetKeyDown(KeyCode.Alpha5)) {slotSelected = 5;} // pressed five
         if(Input.GetKeyDown(KeyCode.Alpha6)) {slotSelected = 6;} // pressed six
 
-        if(Input.GetMouseButtonDown(0) && itemSelected != null && !inventoryIsOpened) {itemSelected.Use();}
+        if(Input.GetMouseButtonDown(0) && itemSelectedInHand != null && !inventoryIsOpened) {itemSelectedInHand.Use();}
     }
 
     private void LoopSelectedSlot() {
@@ -81,15 +93,15 @@ public class InventoryManager : MonoBehaviour
     }
 
     private void SetItemSelected() {
-        if(hotBarItems[slotSelected - 1] == null) {itemSelected = null; hideSelectedItem();} else {
-            itemSelected = hotBarItems[slotSelected - 1]; // get the selected item
+        if(hotBarItems[slotSelected - 1] == null) {itemSelectedInHand = null; hideSelectedItem();} else {
+            itemSelectedInHand = hotBarItems[slotSelected - 1]; // get the selected item
         }
     }
 
     private void TryToShowSelectedItem() {
-        if(itemSelected == null) {return;}
+        if(itemSelectedInHand == null) {return;}
 
-        if(Input.GetMouseButton(0) || itemSelected.GetShowWhenHolding()) { // if the mouse button is down or the item should be shown we show it
+        if(Input.GetMouseButton(0) || itemSelectedInHand.GetShowWhenHolding()) { // if the mouse button is down or the item should be shown we show it
             showSelectedItem();
         } else { // else we hide it
             hideSelectedItem();
@@ -97,7 +109,7 @@ public class InventoryManager : MonoBehaviour
     }
 
     private void showSelectedItem() {
-        hand.sprite = itemSelected.GetSprite();
+        hand.sprite = itemSelectedInHand.GetSprite();
     }
 
     private void hideSelectedItem() {
@@ -230,95 +242,67 @@ public class InventoryManager : MonoBehaviour
         GameObject clickedObj = EventSystem.current.currentSelectedGameObject.transform.parent.gameObject;
         string numberString = clickedObj.name.Substring(11);
         bool isInInventory = false;
-        Image selectedItemImage = selectedItemGO.GetComponent<Image>();
 
         if(numberString[0].Equals('l')) {numberString = numberString.Substring(4); isInInventory = true;}
 
-        int slot = int.Parse(numberString);
+        int slot = int.Parse(numberString) - 1;
 
-        if(hasSelectedItemOnMouse) {
-            if(!isInInventory) {
-                SwapItems(prevSlotSelected, slot + totalSlots - 1);
-            } else {
-                SwapItems(prevSlotSelected, slot - 1);
-            }
-            selectedItemImage.gameObject.SetActive(false);
+        if(AddItemsInSwapping(slot, isInInventory) == false) {
+            SwapItems(slot, isInInventory);
+        }
+    }
+
+    private void SetSelectedItemWithCursorImageAndCount() {
+        if(itemSelectedWithCursor == null) {
+            selectedItemWithCursorImage.enabled = false;
+            selectedItemWithCursorCount.enabled = false;
             return;
         }
 
-        if(!isInInventory && !inventoryIsOpened) {slotSelected = slot; return;}
 
-        Item selectedItem = null;
+        selectedItemWithCursorImage.enabled = true;
+        selectedItemWithCursorCount.enabled = true;
 
-        if(isInInventory) {selectedItem = inventoryItems[slot - 1];} else
-        {selectedItem = hotBarItems[slot - 1];}
-
-        if(selectedItem != null) { 
-
-            selectedItemImage.sprite = selectedItem.GetSprite();
-            if(selectedItem.GetQuantity() == 0) {
-                selectedItemImage.gameObject.transform.GetChild(0).GetComponent<TMP_Text>().text = "";    
-            } else {
-                selectedItemImage.gameObject.transform.GetChild(0).GetComponent<TMP_Text>().text = selectedItem.GetQuantity().ToString();
-            }
-
-            hasSelectedItemOnMouse = true;
-            selectedItemImage.gameObject.SetActive(true);
-        }
-
-        if(!inventoryIsOpened || selectedItem == null) {selectedItemImage.gameObject.SetActive(false);}
-
-        if(isInInventory) {
-            prevSlotSelected = slot - 1;
-        } else {
-            prevSlotSelected = slot + totalSlots - 1;
-        }
-
+        selectedItemWithCursorImage.sprite = itemSelectedWithCursor.GetSprite();
+        selectedItemWithCursorCount.text = itemSelectedWithCursor.GetQuantity().ToString();
     }
 
-    private void SwapItems(int prevSlot, int slot) {
-        Item temp = null;
+    private void SwapItems(int slot, bool isInInventory) {
+        Item temp;
+        
+        if(isInInventory) {
+            temp = inventoryItems[slot];
 
-        bool prevSlotIsInInventory = !(prevSlot >= totalSlots);
-        bool slotIsInInventory = !(slot >= totalSlots);
-
-        if(!prevSlotIsInInventory) {prevSlot -= totalSlots;}
-        if(!slotIsInInventory) {slot -= totalSlots;}
-
-        //Debug.Log("Prev Slot is in Inventory: " + prevSlotIsInInventory + "\nSlot is in Inventory: " + slotIsInInventory);
-        //Debug.Log(prevSlot + " to " + slot);
-
-
-        if(prevSlotIsInInventory && slotIsInInventory) {
-            // both slots are in the inventory
-
-            temp = inventoryItems[prevSlot];
-
-            inventoryItems[prevSlot] = inventoryItems[slot];
-            inventoryItems[slot] = temp;
-        } else if (!prevSlotIsInInventory && slotIsInInventory) {
-            // prev slot is in hotbar
-
-            temp = hotBarItems[prevSlot];
-
-            hotBarItems[prevSlot] = inventoryItems[slot];
-            inventoryItems[slot] = temp;
-        } else if (prevSlotIsInInventory && !slotIsInInventory) {
-            // slot is in hotbar
-
-            temp = inventoryItems[prevSlot];
-
-            inventoryItems[prevSlot] = hotBarItems[slot];
-            hotBarItems[slot] = temp;
+            inventoryItems[slot] = itemSelectedWithCursor;
+            itemSelectedWithCursor = temp;
         } else {
-            // both slots are in hotbar
+            temp = hotBarItems[slot];
 
-            temp = hotBarItems[prevSlot];
+            hotBarItems[slot] = itemSelectedWithCursor;
+            itemSelectedWithCursor = temp;
+        }
+    }
 
-            hotBarItems[prevSlot] = hotBarItems[slot];
-            hotBarItems[slot] = temp;
+    private bool AddItemsInSwapping(int slot, bool isInInventory) {
+
+        Item item;
+
+        if(isInInventory) {
+            item = inventoryItems[slot];
+        } else {
+            item = hotBarItems[slot];
         }
 
-        hasSelectedItemOnMouse = false;
+        if(itemSelectedWithCursor == null || item == null) {
+            return false;
+        }
+
+        if(item.Equals(itemSelectedWithCursor)) {
+            item.AddToQuantity(itemSelectedWithCursor.GetQuantity());
+            itemSelectedWithCursor.AddToQuantity(-itemSelectedWithCursor.GetQuantity());
+            return true;
+        }
+
+        return false;
     }
 }
