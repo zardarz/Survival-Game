@@ -20,3 +20,4 @@ MonoBehaviour:
   quantity: 100
   maxStack: 100
   tile: {fileID: 0}
+  collidable: 1

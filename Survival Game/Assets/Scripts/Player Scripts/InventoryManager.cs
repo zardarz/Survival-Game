@@ -285,14 +285,13 @@ public class InventoryManager : MonoBehaviour
         if(!prevSlotIsInInventory) {prevSlot -= totalSlots;}
         if(!slotIsInInventory) {slot -= totalSlots;}
 
-        Debug.Log("Prev Slot is in Inventory: " + prevSlotIsInInventory + "\nSlot is in Inventory: " + slotIsInInventory);
-        Debug.Log(prevSlot + " to " + slot);
+        //Debug.Log("Prev Slot is in Inventory: " + prevSlotIsInInventory + "\nSlot is in Inventory: " + slotIsInInventory);
+        //Debug.Log(prevSlot + " to " + slot);
 
 
         if(prevSlotIsInInventory && slotIsInInventory) {
             // both slots are in the inventory
 
-            
             temp = inventoryItems[prevSlot];
 
             inventoryItems[prevSlot] = inventoryItems[slot];

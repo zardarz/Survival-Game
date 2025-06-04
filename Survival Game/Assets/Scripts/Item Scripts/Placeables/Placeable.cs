@@ -6,14 +6,20 @@ public class Placeable : Item
 {
     [SerializeField] private Tile tile;
 
-    public override void Use() {
-        quantity--;
+    [SerializeField] private bool collidable;
 
+    public override void Use() {
         Vector2 mousePos = Camera.main.ScreenToWorldPoint(Input.mousePosition);
 
         mousePos.x = Mathf.Floor(mousePos.x);
         mousePos.y = Mathf.Floor(mousePos.y);
 
-        TerrainGenerator.PlaceBlock(tile, (int) mousePos.x, (int) mousePos.y, GetName());
+        if(collidable && TerrainGenerator.PlaceBlock(tile, (int) mousePos.x, (int) mousePos.y, GetName(), collidable)) {
+            quantity--;
+        }
+    }
+
+    public bool GetCollidable() {
+        return collidable;
     }
 }
