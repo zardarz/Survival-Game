@@ -75,4 +75,8 @@ public class Item : ScriptableObject
             Destroy(this);
         }
     }
+
+    public void SetQuantity(int num) {
+        quantity = num;
+    }
 }

@@ -30,6 +30,7 @@ public class InventoryManager : MonoBehaviour
     private Image selectedItemWithCursorImage;
     private TMP_Text selectedItemWithCursorCount;
     private Item itemSelectedWithCursor;
+    private bool lastWasRightClick;
 
 
     // Test Items
@@ -238,14 +239,19 @@ public class InventoryManager : MonoBehaviour
     }
 
 
-    public void OnButtonClick() {
-        GameObject clickedObj = EventSystem.current.currentSelectedGameObject.transform.parent.gameObject;
+    public void OnButtonClick(GameObject buttonObj, bool wasRightClick) {
+        GameObject clickedObj = buttonObj.transform.parent.gameObject;
         string numberString = clickedObj.name.Substring(11);
         bool isInInventory = false;
 
         if(numberString[0].Equals('l')) {numberString = numberString.Substring(4); isInInventory = true;}
 
         int slot = int.Parse(numberString) - 1;
+
+        if(wasRightClick) {
+            AddItemToItem(slot, isInInventory);
+            return;
+        }
 
         if(AddItemsInSwapping(slot, isInInventory) == false) {
             SwapItems(slot, isInInventory);
@@ -304,5 +310,36 @@ public class InventoryManager : MonoBehaviour
         }
 
         return false;
+    }
+
+    private void AddItemToItem(int slot, bool isInInventory) {
+        if(itemSelectedWithCursor == null) {return;}
+
+        Item item;
+
+        if(isInInventory) {
+            item = inventoryItems[slot];
+
+            if(item == null) {
+                inventoryItems[slot] = Instantiate(itemSelectedWithCursor);
+                inventoryItems[slot].SetQuantity(1);
+                itemSelectedWithCursor.AddToQuantity(-1);
+            } else if(item.Equals(itemSelectedWithCursor)) {
+                inventoryItems[slot].AddToQuantity(1);
+                itemSelectedWithCursor.AddToQuantity(-1);
+            }
+
+        } else {
+            item = hotBarItems[slot];
+
+            if(item == null) {
+                hotBarItems[slot] = Instantiate(itemSelectedWithCursor);
+                hotBarItems[slot].SetQuantity(1);
+                itemSelectedWithCursor.AddToQuantity(-1);
+            } else if(item.Equals(itemSelectedWithCursor)) {
+                hotBarItems[slot].AddToQuantity(1);
+                itemSelectedWithCursor.AddToQuantity(-1);
+            }
+        }
     }
 }
