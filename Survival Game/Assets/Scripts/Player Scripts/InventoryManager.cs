@@ -1,12 +1,10 @@
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
-using UnityEngine.EventSystems;
-
 
 public class InventoryManager : MonoBehaviour
 {
-    // Items in inventory/hotbar
+    [Header("Inventory/Hotbar Variables")]
     [SerializeField] private Item[] inventoryItems;
     [SerializeField] private GameObject inventoryGO;
     
@@ -14,7 +12,7 @@ public class InventoryManager : MonoBehaviour
     [SerializeField] private GameObject hotBarGO;
 
 
-    // Showing selected item
+    [Header("Showing What Item is Selected")]
     [SerializeField] private int slotSelected = 1;
     private Item itemSelectedInHand;
     [SerializeField] private SpriteRenderer hand;
@@ -25,15 +23,17 @@ public class InventoryManager : MonoBehaviour
     private bool inventoryIsOpened;
 
 
-    // Inventory swapping stuff
+    [Header("Inventory Swapping")]
     [SerializeField] private GameObject selectedItemWithCursorGO;
     private Image selectedItemWithCursorImage;
     private TMP_Text selectedItemWithCursorCount;
     private Item itemSelectedWithCursor;
-    private bool lastWasRightClick;
 
+    [Header("Dropping Items")]
+    [SerializeField] private GameObject droppedItemPrefab;
+    [SerializeField] private float droppingItemStrength;
 
-    // Test Items
+    [Header("Test Items")]
     public Item testItem;
 
     public Placeable testPlaceable;
@@ -44,17 +44,16 @@ public class InventoryManager : MonoBehaviour
         totalSlots = inventorySize.x * inventorySize.y;
 
         inventoryItems = new Item[totalSlots];
-
-        hotBarItems[0] = Instantiate(testItem);
-        hotBarItems[1] = Instantiate(testPlaceable);
-        hotBarItems[2] = Instantiate(testTestPlaceable);
-
-
-        inventoryItems[7] = Instantiate(testItem);
-        inventoryItems[10] = Instantiate(testPlaceable);
+        hotBarItems = new Item[inventorySize.y];
 
         selectedItemWithCursorImage = selectedItemWithCursorGO.GetComponent<Image>();
         selectedItemWithCursorCount = selectedItemWithCursorGO.transform.GetChild(0).GetComponent<TMP_Text>();
+
+        AddItemToInventory(Instantiate(testItem));
+        AddItemToInventory(Instantiate(testPlaceable));
+        AddItemToInventory(Instantiate(testTestPlaceable));
+        AddItemToInventory(Instantiate(testItem));
+        AddItemToInventory(Instantiate(testPlaceable));
     }
 
     void Update() {
@@ -171,7 +170,6 @@ public class InventoryManager : MonoBehaviour
         }
     }
 
-
     private void SetInventorySprites() {
         int i = 0;
 
@@ -225,10 +223,31 @@ public class InventoryManager : MonoBehaviour
     }
 
     private void HandleInventoryInputs() {
-        if(Input.GetKeyDown(KeyCode.E)) {ToggleInventory();}
+        if(Input.GetKeyDown(KeyCode.E)) {ToggleInventory();} // toggle inventory
+        if(Input.GetKeyDown(KeyCode.Q)) {DropItem();} // drop item
     }
 
-    private void ToggleInventory() { // we have to set the parent to unactive so we cant see the background
+    private void DropItem() {
+        if(itemSelectedInHand == null) {return;} // if we don't have an item in our hand we don't do anything
+
+        GameObject newDroppedItem = Instantiate(droppedItemPrefab); // make a dropped item prefab
+
+        newDroppedItem.GetComponent<SpriteRenderer>().sprite = itemSelectedInHand.GetSprite(); // set the dropped item sprite to the item sprite
+        newDroppedItem.transform.position = hand.transform.position; // set its position to the player's hand position
+
+        Vector2 dir = (Camera.main.ScreenToWorldPoint(Input.mousePosition) - transform.position).normalized; // find the direction of the mouse relative to the player
+
+        newDroppedItem.GetComponent<Rigidbody2D>().AddForce(dir * droppingItemStrength, ForceMode2D.Impulse); // add some force to the dropped item
+        newDroppedItem.GetComponent<Rigidbody2D>().AddTorque(UnityEngine.Random.Range(-10,10)); // add to spinyness to it 
+        newDroppedItem.GetComponent<DroppedItem>().item = itemSelectedInHand; // set the item on the dropped item to the corresponding item
+
+        itemSelectedInHand.AddToQuantity(-1); // drop the item quantity by one
+    }
+
+    private void ToggleInventory() {
+        // we are using the parent of the inventory gameobject because i set the parent to the background which also needs to be disactivated 
+
+        // if the parent is active we set it to unactive and visersa
         if(inventoryGO.transform.parent.gameObject.activeSelf) {
             inventoryGO.transform.parent.gameObject.SetActive(false);
             inventoryIsOpened = false;
@@ -238,37 +257,60 @@ public class InventoryManager : MonoBehaviour
         }
     }
 
-
     public void OnButtonClick(GameObject buttonObj, bool wasRightClick) {
+        // get the object that was clicked
         GameObject clickedObj = buttonObj.transform.parent.gameObject;
+
+        // get the slot of it 
+        // hotbar slot number is the 11th character
         string numberString = clickedObj.name.Substring(11);
         bool isInInventory = false;
 
+        // if the 11th charcter is an l, that means it is in the inventory
         if(numberString[0].Equals('l')) {numberString = numberString.Substring(4); isInInventory = true;}
 
+        // turn the string to an int
         int slot = int.Parse(numberString) - 1;
 
+        // if the slot is in the hotbar and the inventory is closed we turn the selected slot to the slot that was clicked 
+        if(!isInInventory && !inventoryIsOpened) {
+            slotSelected = slot + 1;
+            return;
+        }
+
+        // if it was a right click we add the selected item to the slot it was in
         if(wasRightClick) {
             AddItemToItem(slot, isInInventory);
             return;
         }
 
+        if(Input.GetKey(KeyCode.LeftShift)) {
+            CollectAllItems(slot, isInInventory);
+            return;
+        }
+
+        // add item in swpping checks if the item we are swapping is the same as the item we have selected
+        // if it is false that means we didn't add so we can swap
         if(AddItemsInSwapping(slot, isInInventory) == false) {
             SwapItems(slot, isInInventory);
         }
     }
 
     private void SetSelectedItemWithCursorImageAndCount() {
+        // if the selected item with currsor is nothing 
+        // we turn of the iamge and count
+
         if(itemSelectedWithCursor == null) {
             selectedItemWithCursorImage.enabled = false;
             selectedItemWithCursorCount.enabled = false;
             return;
         }
 
-
+        // else we turn them on
         selectedItemWithCursorImage.enabled = true;
         selectedItemWithCursorCount.enabled = true;
 
+        // and set its sprite to the item selected sprite and set the count to the items quantity
         selectedItemWithCursorImage.sprite = itemSelectedWithCursor.GetSprite();
         selectedItemWithCursorCount.text = itemSelectedWithCursor.GetQuantity().ToString();
     }
@@ -276,12 +318,14 @@ public class InventoryManager : MonoBehaviour
     private void SwapItems(int slot, bool isInInventory) {
         Item temp;
         
+        // if the swap is in the inventory we swap with the item in the inventory
         if(isInInventory) {
             temp = inventoryItems[slot];
 
             inventoryItems[slot] = itemSelectedWithCursor;
             itemSelectedWithCursor = temp;
         } else {
+            // else we swap with the hotbar 
             temp = hotBarItems[slot];
 
             hotBarItems[slot] = itemSelectedWithCursor;
@@ -290,22 +334,36 @@ public class InventoryManager : MonoBehaviour
     }
 
     private bool AddItemsInSwapping(int slot, bool isInInventory) {
-
         Item item;
 
+        // get the item either in the hotbar or the inventory
         if(isInInventory) {
             item = inventoryItems[slot];
         } else {
             item = hotBarItems[slot];
         }
 
+        // if the item in the cursor or the item in the slot is null then we don't add
         if(itemSelectedWithCursor == null || item == null) {
             return false;
         }
 
+        // else we check if the item is the same as the item in the cursor
         if(item.Equals(itemSelectedWithCursor)) {
+            // we calculate how much space there is left in the slot 
+            int amountLeft = item.GetMaxStack() - item.GetQuantity();
+
+            // and if it is more than or equal to 0 we add it to the item and remove it from the item in the cursor
+            if(amountLeft >= 0) {
+                item.AddToQuantity(amountLeft);
+                itemSelectedWithCursor.AddToQuantity(-amountLeft);
+                return true;
+            }
+
+            // else we add all of it the item
             item.AddToQuantity(itemSelectedWithCursor.GetQuantity());
             itemSelectedWithCursor.AddToQuantity(-itemSelectedWithCursor.GetQuantity());
+
             return true;
         }
 
@@ -313,18 +371,23 @@ public class InventoryManager : MonoBehaviour
     }
 
     private void AddItemToItem(int slot, bool isInInventory) {
+        // if we don't have a selected item we don't do anything
         if(itemSelectedWithCursor == null) {return;}
 
         Item item;
 
+        // get the item if it is in the hotbar or inventory
         if(isInInventory) {
             item = inventoryItems[slot];
 
+            // if there is no item in the slot
             if(item == null) {
+                // set that slot to the item in the cursor and set its quantity to 1
                 inventoryItems[slot] = Instantiate(itemSelectedWithCursor);
                 inventoryItems[slot].SetQuantity(1);
                 itemSelectedWithCursor.AddToQuantity(-1);
-            } else if(item.Equals(itemSelectedWithCursor)) {
+            } else if(item.Equals(itemSelectedWithCursor) && !(item.GetQuantity() + 1 > item.GetMaxStack())) {
+                // else we add 1 to its quantity
                 inventoryItems[slot].AddToQuantity(1);
                 itemSelectedWithCursor.AddToQuantity(-1);
             }
@@ -332,14 +395,123 @@ public class InventoryManager : MonoBehaviour
         } else {
             item = hotBarItems[slot];
 
+            // same thing but with the hotbar
             if(item == null) {
                 hotBarItems[slot] = Instantiate(itemSelectedWithCursor);
                 hotBarItems[slot].SetQuantity(1);
                 itemSelectedWithCursor.AddToQuantity(-1);
-            } else if(item.Equals(itemSelectedWithCursor)) {
+            } else if(item.Equals(itemSelectedWithCursor) && !(item.GetQuantity() + 1 > item.GetMaxStack())) {
                 hotBarItems[slot].AddToQuantity(1);
                 itemSelectedWithCursor.AddToQuantity(-1);
             }
+        }
+    }
+
+    private void CollectAllItems(int slot, bool isInInventory) {
+        Item item;
+
+        if (isInInventory) {
+            item = inventoryItems[slot];
+        } else {
+            item = hotBarItems[slot];
+        }
+
+        for(int i = 0; i < totalSlots; i++) {
+            int amountAbleToBeTaken = item.GetMaxStack() - item.GetQuantity();
+
+            if(amountAbleToBeTaken <= 0) {
+                return;
+            }
+
+            Item itemToCollect = inventoryItems[i];
+
+            if(itemToCollect == null || !itemToCollect.Equals(item)) {
+                continue;
+            }
+
+            if(itemToCollect.GetQuantity() < amountAbleToBeTaken) {
+                item.AddToQuantity(itemToCollect.GetQuantity());
+                itemToCollect.AddToQuantity(-itemToCollect.GetQuantity());
+            } else {
+                item.AddToQuantity(amountAbleToBeTaken);
+                itemToCollect.AddToQuantity(-amountAbleToBeTaken);
+            }
+        }
+
+        for(int i = 0; i < hotBarItems.Length; i++) {
+            int amountAbleToBeTaken = item.GetMaxStack() - item.GetQuantity();
+
+            if(amountAbleToBeTaken <= 0) {
+                return;
+            }
+
+            Item itemToCollect = hotBarItems[i];
+
+            if(itemToCollect == null || !itemToCollect.Equals(item)) {
+                continue;
+            }
+
+            if(itemToCollect.GetQuantity() < amountAbleToBeTaken) {
+                item.AddToQuantity(itemToCollect.GetQuantity());
+                itemToCollect.AddToQuantity(-itemToCollect.GetQuantity());
+            } else {
+                item.AddToQuantity(amountAbleToBeTaken);
+                itemToCollect.AddToQuantity(-amountAbleToBeTaken);
+            }
+        }
+    }
+
+    public void AddItemToInventory(Item itemToAdd) {
+        int i = 0;
+
+        // Try to add item to hotbar
+        foreach(Item item in hotBarItems) {
+
+            // if the item is blank we add it
+            if(item == null) {
+                hotBarItems[i] = itemToAdd;
+                return;
+            }
+
+            // if the item isn't stackable, or the item will over flow, we dont add to it and continue
+            if(item.GetStackable() == false || item.GetQuantity() + itemToAdd.GetQuantity() > item.GetMaxStack()) {
+                i++;
+                continue;
+            }
+
+            // if the item is the same as the item we want to add we add their quantities together
+            if(item.Equals(itemToAdd)) {
+                hotBarItems[i].AddToQuantity(itemToAdd.GetQuantity());
+                return;
+            }
+
+            i++;
+        }
+
+        i = 0;
+
+        // Try to add item to inventory
+        foreach(Item item in inventoryItems) {
+
+            // if the item is blank we add it
+            if(item == null) {
+                inventoryItems[i] = itemToAdd;
+                return;
+            }
+
+            // if the item isn't stackable, or the item will over flow, we dont add to it and continue
+            if(item.GetStackable() == false || item.GetQuantity() + itemToAdd.GetQuantity() > item.GetMaxStack()) {
+                i++;
+                continue;
+            }
+
+            // if the item is the same as the item we want to add we add their quantities together
+            if(item.Equals(itemToAdd)) {
+                inventoryItems[i].AddToQuantity(itemToAdd.GetQuantity());
+                return;
+            }
+
+            i++;
         }
     }
 }

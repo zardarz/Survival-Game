@@ -3950,7 +3950,7 @@ GameObject:
   m_Component:
   - component: {fileID: 888328315}
   - component: {fileID: 888328316}
-  m_Layer: 0
+  m_Layer: 3
   m_Name: Selected Item
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -3966,8 +3966,8 @@ Transform:
   m_GameObject: {fileID: 888328314}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0.22, y: 0, z: 0}
-  m_LocalScale: {x: 0.5, y: 0.5, z: 1}
+  m_LocalPosition: {x: 0.295, y: 0, z: 0}
+  m_LocalScale: {x: 0.4, y: 0.4, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 890909493}
@@ -4018,7 +4018,7 @@ SpriteRenderer:
   m_FlipX: 0
   m_FlipY: 0
   m_DrawMode: 0
-  m_Size: {x: 1, y: 1}
+  m_Size: {x: 0.16, y: 0.16}
   m_AdaptiveModeThreshold: 0.5
   m_SpriteTileMode: 0
   m_WasSpriteAssigned: 0
@@ -4035,7 +4035,7 @@ GameObject:
   - component: {fileID: 890909493}
   - component: {fileID: 890909495}
   - component: {fileID: 890909494}
-  m_Layer: 0
+  m_Layer: 3
   m_Name: Hand
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -9750,9 +9750,9 @@ GameObject:
   - component: {fileID: 1972522976}
   - component: {fileID: 1972522981}
   - component: {fileID: 1972522982}
-  m_Layer: 0
+  m_Layer: 3
   m_Name: Player
-  m_TagString: Untagged
+  m_TagString: Player
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -9957,6 +9957,8 @@ MonoBehaviour:
   slotSelected: 1
   hand: {fileID: 888328316}
   selectedItemWithCursorGO: {fileID: 1387408346}
+  droppedItemPrefab: {fileID: 1296326589306400978, guid: eebe6493ef5f74864946fc734cac983e, type: 3}
+  droppingItemStrength: 6
   testItem: {fileID: 11400000, guid: e9e7722e79d8d4f41b5e764c9e31df0e, type: 2}
   testPlaceable: {fileID: 11400000, guid: 99098a769b99449babae04f47e81edbd, type: 2}
   testTestPlaceable: {fileID: 11400000, guid: 8cf155a6bfd8c4d19b8598bd82b48f9b, type: 2}

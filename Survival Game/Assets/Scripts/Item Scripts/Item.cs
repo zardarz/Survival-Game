@@ -79,4 +79,8 @@ public class Item : ScriptableObject
     public void SetQuantity(int num) {
         quantity = num;
     }
+
+    public int GetMaxStack() {
+        return maxStack;
+    }
 }

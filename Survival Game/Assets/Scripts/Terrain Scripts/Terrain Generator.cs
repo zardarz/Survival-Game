@@ -1,5 +1,4 @@
 using System.Collections.Generic;
-using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.Tilemaps;
 
@@ -51,6 +50,7 @@ public class TerrainGenerator : MonoBehaviour
 
         if(collidable && Physics2D.OverlapBoxAll(new Vector2(pos.x + 0.5f, pos.y + 0.5f), new Vector2(0.9f,0.9f), 0).Length != 0) {return false;}
 
+        
         Tilemap tilemap;
 
         if(collidable) {

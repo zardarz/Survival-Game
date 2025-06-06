@@ -14,7 +14,7 @@ public class Placeable : Item
         mousePos.x = Mathf.Floor(mousePos.x);
         mousePos.y = Mathf.Floor(mousePos.y);
 
-        if(collidable && TerrainGenerator.PlaceBlock(tile, (int) mousePos.x, (int) mousePos.y, GetName(), collidable)) {
+        if(TerrainGenerator.PlaceBlock(tile, (int) mousePos.x, (int) mousePos.y, GetName(), collidable)) {
             quantity--;
         }
     }
