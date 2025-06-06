@@ -354,7 +354,7 @@ public class InventoryManager : MonoBehaviour
             int amountLeft = item.GetMaxStack() - item.GetQuantity();
 
             // and if it is more than or equal to 0 we add it to the item and remove it from the item in the cursor
-            if(amountLeft >= 0) {
+            if(!(amountLeft >= itemSelectedWithCursor.GetQuantity())) {
                 item.AddToQuantity(amountLeft);
                 itemSelectedWithCursor.AddToQuantity(-amountLeft);
                 return true;
@@ -408,6 +408,7 @@ public class InventoryManager : MonoBehaviour
     }
 
     private void CollectAllItems(int slot, bool isInInventory) {
+        // get the item
         Item item;
 
         if (isInInventory) {
@@ -416,27 +417,37 @@ public class InventoryManager : MonoBehaviour
             item = hotBarItems[slot];
         }
 
+        // go foreach inventory slot
         for(int i = 0; i < totalSlots; i++) {
+            // get the amount of quantity left in the pressed slot 
             int amountAbleToBeTaken = item.GetMaxStack() - item.GetQuantity();
 
+            // if it is left than or equal to 0 we return
             if(amountAbleToBeTaken <= 0) {
                 return;
             }
 
+            // get the item we need to collect
             Item itemToCollect = inventoryItems[i];
 
-            if(itemToCollect == null || !itemToCollect.Equals(item)) {
+            // if the item is null or the item is not the same as the pressed item or we are on the same slot we continue to the next slot
+            if(itemToCollect == null || !itemToCollect.Equals(item) || slot == i) {
                 continue;
             }
 
+            // if the quantity in the item we want to collect is less than the amount of space we have left
             if(itemToCollect.GetQuantity() < amountAbleToBeTaken) {
+                // we add all of it to te pressed slot and remove it from the collected slot
                 item.AddToQuantity(itemToCollect.GetQuantity());
                 itemToCollect.AddToQuantity(-itemToCollect.GetQuantity());
             } else {
+                // else we take and remove as much as we can 
                 item.AddToQuantity(amountAbleToBeTaken);
                 itemToCollect.AddToQuantity(-amountAbleToBeTaken);
             }
         }
+
+        // same thing but for the hotbar
 
         for(int i = 0; i < hotBarItems.Length; i++) {
             int amountAbleToBeTaken = item.GetMaxStack() - item.GetQuantity();
@@ -447,7 +458,7 @@ public class InventoryManager : MonoBehaviour
 
             Item itemToCollect = hotBarItems[i];
 
-            if(itemToCollect == null || !itemToCollect.Equals(item)) {
+            if(itemToCollect == null || !itemToCollect.Equals(item) || slot == i) {
                 continue;
             }
 
