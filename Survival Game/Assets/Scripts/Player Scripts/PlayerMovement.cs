@@ -7,6 +7,8 @@ public class PlayerMovement : MonoBehaviour
     private SpriteRenderer spriteRenderer;
     private Animator animator;
 
+    private static Transform playerTransform;
+
     [Header("Settings")]
     [SerializeField] private float speed;
 
@@ -17,6 +19,7 @@ public class PlayerMovement : MonoBehaviour
         rb = gameObject.GetComponent<Rigidbody2D>();
         spriteRenderer = gameObject.GetComponent<SpriteRenderer>();
         animator = gameObject.GetComponent<Animator>();
+        playerTransform = transform;
     }
 
     void Update() {
@@ -27,7 +30,7 @@ public class PlayerMovement : MonoBehaviour
         if(movement.x == 1) {spriteRenderer.flipX = false;}
         if(movement.x == -1) {spriteRenderer.flipX = true;}
 
-        flipPlayerBasedOnMousePos();
+        FlipPlayerBasedOnMousePos();
 
         if(movement.x != 0 || movement.y != 0) {animator.SetBool("IsMoving", true);}else {animator.SetBool("IsMoving", false);}
     }
@@ -40,11 +43,15 @@ public class PlayerMovement : MonoBehaviour
         rb.MovePosition(rb.position + vectorToMove * Time.fixedDeltaTime);
     }
 
-    void flipPlayerBasedOnMousePos() {
+    void FlipPlayerBasedOnMousePos() {
         if(!Input.GetMouseButton(0)) {return;} // make sure the player is holding the mouse down
 
         Vector2 mousePos = Camera.main.ScreenToWorldPoint(Input.mousePosition);
 
         if(mousePos.x - transform.position.x > 0) {spriteRenderer.flipX = false;} else {spriteRenderer.flipX = true;}
+    }
+
+    public static Transform GetPlayerTransform() {
+        return playerTransform;
     }
 }

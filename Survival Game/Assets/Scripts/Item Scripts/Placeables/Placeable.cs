@@ -4,6 +4,7 @@ using UnityEngine.Tilemaps;
 [CreateAssetMenu(fileName = "New Placeable", menuName = "Placeable")]
 public class Placeable : Item
 {
+    [Header("Placeable")]
     [SerializeField] private Tile tile;
 
     [SerializeField] private bool collidable;

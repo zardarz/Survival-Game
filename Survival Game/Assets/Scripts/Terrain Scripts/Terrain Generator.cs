@@ -87,7 +87,7 @@ public class TerrainGenerator : MonoBehaviour
     }
 
     private static Tile GetRandomTile(string name) {
-        if(tiles.TryGetValue(name, out Tile[] result)) {return result[Random.Range(0,RandomTextureGenerator.amountOfUniqueRandomTextures)];}
+        if(tiles.TryGetValue(name, out Tile[] result)) {return result[UnityEngine.Random.Range(0,RandomTextureGenerator.amountOfUniqueRandomTextures)];}
 
         return null;
     }
@@ -98,4 +98,19 @@ public class TerrainGenerator : MonoBehaviour
             tiles.Add(tileName, GetTiles(tileName));
         }
     }
+
+    public static void BreakBlock(RaycastHit2D hit, float angleOfRay) {
+        // this doesn't give you the correct position
+        Vector3Int tilePos = collidableTilemap.WorldToCell(hit.point);
+
+        // so we fix it here
+        Vector3 hitFrom = hit.normal;
+
+        if(!(angleOfRay > -45f && angleOfRay < 135f)) {
+            tilePos -= new Vector3Int((int)hitFrom.x, (int)hitFrom.y, 0);
+        }
+
+        collidableTilemap.SetTile(tilePos, null);
+    }
+
 }

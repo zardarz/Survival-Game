@@ -239,13 +239,11 @@ public class InventoryManager : MonoBehaviour
         Vector2 dir = (Camera.main.ScreenToWorldPoint(Input.mousePosition) - transform.position).normalized; // find the direction of the mouse relative to the player
 
         newDroppedItem.GetComponent<Rigidbody2D>().AddForce(dir * droppingItemStrength, ForceMode2D.Impulse); // add some force to the dropped item
-        newDroppedItem.GetComponent<Rigidbody2D>().AddTorque(Random.Range(-10,10)); // add to spinyness to it 
+        newDroppedItem.GetComponent<Rigidbody2D>().AddTorque(Random.Range(-30,30)); // add to spinyness to it 
         newDroppedItem.GetComponent<DroppedItem>().item = Instantiate(itemSelectedInHand); // set the item on the dropped item to the corresponding item
         newDroppedItem.GetComponent<DroppedItem>().item.SetQuantity(1);
 
-        newDroppedItem.GetComponent<BoxCollider2D>().enabled = false; // disable collision so the player doesn't pick up the item as they drop it
-
-        StartCoroutine(EnableColliderAfterTime(0.5f, newDroppedItem.GetComponent<BoxCollider2D>())); // enable it after .5 seconds
+        StartCoroutine(EnablePickingUpAfterTime(0.5f, newDroppedItem.GetComponent<DroppedItem>())); // enable picking up after .5 seconds
 
         itemSelectedInHand.AddToQuantity(-1); // drop the item quantity by one
     }
@@ -534,15 +532,15 @@ public class InventoryManager : MonoBehaviour
 
     private void OnTriggerEnter2D(Collider2D other)
     {
-        if(other.gameObject.GetComponent<DroppedItem>() != null) { // if the collider has a dropped item componnent
+        if(other.gameObject.GetComponent<DroppedItem>() != null && other.gameObject.GetComponent<DroppedItem>().canBePickedup) { // if the collider has a dropped item componnent
             AddItemToInventory(other.gameObject.GetComponent<DroppedItem>().item); // we add it to the inventory
             Destroy(other.gameObject);
         }
     }
 
-    private IEnumerator EnableColliderAfterTime(float delay, BoxCollider2D boxCollider2D)
+    private IEnumerator EnablePickingUpAfterTime(float delay, DroppedItem item)
     {
         yield return new WaitForSeconds(delay);
-        boxCollider2D.enabled = true;
+        item.canBePickedup = true;
     }
 }

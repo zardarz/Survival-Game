@@ -1,9 +1,9 @@
-using System;
 using UnityEngine;
 
 [CreateAssetMenu(fileName = "New Item", menuName = "Item")]
 public class Item : ScriptableObject
 {
+    [Header("Item")]
     [SerializeField] private string itemName;
 
     [SerializeField] private Sprite sprite;
