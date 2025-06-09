@@ -3117,7 +3117,7 @@ GameObject:
   - component: {fileID: 738529564}
   - component: {fileID: 738529562}
   - component: {fileID: 738529563}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: Background
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -3967,7 +3967,7 @@ Transform:
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0.295, y: 0, z: 0}
-  m_LocalScale: {x: 0.4, y: 0.4, z: 1}
+  m_LocalScale: {x: 0.5, y: 0.5, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 890909493}
@@ -4599,7 +4599,7 @@ GameObject:
   - component: {fileID: 1057024132}
   - component: {fileID: 1057024131}
   - component: {fileID: 1057024130}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: Collideable stuff
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -9959,7 +9959,7 @@ MonoBehaviour:
   selectedItemWithCursorGO: {fileID: 1387408346}
   droppedItemPrefab: {fileID: 1296326589306400978, guid: eebe6493ef5f74864946fc734cac983e, type: 3}
   droppingItemStrength: 6
-  testItem: {fileID: 11400000, guid: e9e7722e79d8d4f41b5e764c9e31df0e, type: 2}
+  testItem: {fileID: 11400000, guid: ea4b3cebdfd50443fb92e9d8b38cc9c2, type: 2}
   testPlaceable: {fileID: 11400000, guid: 99098a769b99449babae04f47e81edbd, type: 2}
   testTestPlaceable: {fileID: 11400000, guid: 8cf155a6bfd8c4d19b8598bd82b48f9b, type: 2}
 --- !u!1 &2067448353

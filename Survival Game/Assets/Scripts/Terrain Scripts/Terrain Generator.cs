@@ -10,7 +10,7 @@ public class TerrainGenerator : MonoBehaviour
     [SerializeField] private static Tilemap backgroundTilemap;
     [SerializeField] private static Tilemap collidableTilemap;
 
-    private static Dictionary<string, Tile[]> tiles = new Dictionary<string, Tile[]>();
+    private static Dictionary<string, TileData[]> tiles = new Dictionary<string, TileData[]>();
 
     private RandomTextureGenerator randomTextureGenerator;
     
@@ -30,12 +30,12 @@ public class TerrainGenerator : MonoBehaviour
         }
     }
 
-    private Tile[] GetTiles(string tileName) {
-        Tile[] tiles = new Tile[RandomTextureGenerator.amountOfUniqueRandomTextures];
+    private TileData[] GetTiles(string tileName) {
+        TileData[] tiles = new TileData[RandomTextureGenerator.amountOfUniqueRandomTextures];
         Sprite[] sprites = RandomTextureGenerator.GetSprites(tileName);
 
         for(int i = 0; i < RandomTextureGenerator.amountOfUniqueRandomTextures; i++) {
-            Tile newTile = ScriptableObject.CreateInstance<Tile>();
+            TileData newTile = ScriptableObject.CreateInstance<TileData>();
 
             newTile.sprite = sprites[i];
 
@@ -87,7 +87,7 @@ public class TerrainGenerator : MonoBehaviour
     }
 
     private static Tile GetRandomTile(string name) {
-        if(tiles.TryGetValue(name, out Tile[] result)) {return result[UnityEngine.Random.Range(0,RandomTextureGenerator.amountOfUniqueRandomTextures)];}
+        if(tiles.TryGetValue(name, out TileData[] result)) {return result[UnityEngine.Random.Range(0,RandomTextureGenerator.amountOfUniqueRandomTextures)];}
 
         return null;
     }
@@ -112,5 +112,4 @@ public class TerrainGenerator : MonoBehaviour
 
         collidableTilemap.SetTile(tilePos, null);
     }
-
 }

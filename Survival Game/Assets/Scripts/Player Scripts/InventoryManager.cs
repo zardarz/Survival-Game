@@ -23,6 +23,9 @@ public class InventoryManager : MonoBehaviour
     private int totalSlots;
     private bool inventoryIsOpened;
 
+    // Fire rate stuff
+    private float nextTimeToFire;
+
 
     [Header("Inventory Swapping")]
     [SerializeField] private GameObject selectedItemWithCursorGO;
@@ -86,6 +89,11 @@ public class InventoryManager : MonoBehaviour
         if(Input.GetKeyDown(KeyCode.Alpha6)) {slotSelected = 6;} // pressed six
 
         if(Input.GetMouseButtonDown(0) && itemSelectedInHand != null && !inventoryIsOpened) {itemSelectedInHand.Use();}
+
+        if(Input.GetMouseButton(0) && itemSelectedInHand is Tool && Time.time >= nextTimeToFire) {
+            nextTimeToFire = Time.time + 1f / itemSelectedInHand.GetToolSpeed();
+            itemSelectedInHand.Use();
+        }
     }
 
     private void LoopSelectedSlot() {

@@ -83,4 +83,8 @@ public class Item : ScriptableObject
     public int GetMaxStack() {
         return maxStack;
     }
+
+    public virtual float GetToolSpeed() {
+        return -1f;
+    }
 }
