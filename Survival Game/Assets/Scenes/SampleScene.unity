@@ -4243,6 +4243,7 @@ GameObject:
   - component: {fileID: 909248375}
   - component: {fileID: 909248374}
   - component: {fileID: 909248376}
+  - component: {fileID: 909248377}
   m_Layer: 0
   m_Name: Map
   m_TagString: Untagged
@@ -4293,12 +4294,27 @@ MonoBehaviour:
   generatedTileEntries:
   - tileName: Grass
     tileColor: {r: 0, g: 0.3679245, b: 0.010433334, a: 1}
+    placeable: {fileID: 11400000, guid: e9e7722e79d8d4f41b5e764c9e31df0e, type: 2}
   - tileName: Stone
     tileColor: {r: 0.1792453, g: 0.1792453, b: 0.1792453, a: 1}
-  - tileName: Test
-    tileColor: {r: 1, g: 0, b: 0, a: 1}
-  - tileName: Another test
-    tileColor: {r: 0.3329082, g: 0.4811321, b: 0.3290762, a: 1}
+    placeable: {fileID: 11400000, guid: 99098a769b99449babae04f47e81edbd, type: 2}
+--- !u!114 &909248377
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 909248373}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ea1a35014a97544858ede4c830da3028, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  placeableTileEntries:
+  - placeableName: Stone
+    placeable: {fileID: 11400000, guid: 99098a769b99449babae04f47e81edbd, type: 2}
+  - placeableName: Grass
+    placeable: {fileID: 11400000, guid: e9e7722e79d8d4f41b5e764c9e31df0e, type: 2}
 --- !u!1 &927614349
 GameObject:
   m_ObjectHideFlags: 0
@@ -9944,15 +9960,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 315be02bc90eb4c67b62095da8887e72, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  inventoryItems: []
   inventoryGO: {fileID: 1788984459}
-  hotBarItems:
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
   hotBarGO: {fileID: 1715273000}
   slotSelected: 1
   hand: {fileID: 888328316}

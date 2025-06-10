@@ -3,6 +3,7 @@ using UnityEngine;
 public class Tool : Item
 {
     [Header("Tool")]
+    [Range(0,30)]
     [SerializeField] private float toolSpeed;
     [SerializeField] private float toolStrength;
     [SerializeField] public float toolRange;

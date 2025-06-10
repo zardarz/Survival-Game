@@ -19,7 +19,7 @@ MonoBehaviour:
   generatedSprite: 0
   quantity: 1
   maxStack: 1
-  toolSpeed: 0
+  toolSpeed: 30
   toolStrength: 0
   toolRange: 10
   tilemap:

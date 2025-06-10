@@ -25,7 +25,7 @@ public class TerrainGenerator : MonoBehaviour
 
         for(int x = -50; x < 50; x++) {
             for(int y = -50; y < 50; y++) {
-                PlaceBlock(x, y, "Grass", false);
+                PlaceBlock(x, y, "Wood", true);
             }
         }
     }
@@ -39,6 +39,8 @@ public class TerrainGenerator : MonoBehaviour
 
             newTile.sprite = sprites[i];
 
+            newTile.tileName = tileName;
+
             tiles[i] = newTile;
         }
 
@@ -50,7 +52,6 @@ public class TerrainGenerator : MonoBehaviour
 
         if(collidable && Physics2D.OverlapBoxAll(new Vector2(pos.x + 0.5f, pos.y + 0.5f), new Vector2(0.9f,0.9f), 0).Length != 0) {return false;}
 
-        
         Tilemap tilemap;
 
         if(collidable) {
@@ -86,8 +87,11 @@ public class TerrainGenerator : MonoBehaviour
         return true;
     }
 
-    private static Tile GetRandomTile(string name) {
-        if(tiles.TryGetValue(name, out TileData[] result)) {return result[UnityEngine.Random.Range(0,RandomTextureGenerator.amountOfUniqueRandomTextures)];}
+    private static TileData GetRandomTile(string name) {
+        if(tiles.TryGetValue(name, out TileData[] result)) {
+            TileData randomTile = result[UnityEngine.Random.Range(0,RandomTextureGenerator.amountOfUniqueRandomTextures)];
+            return randomTile;
+        }
 
         return null;
     }
@@ -108,6 +112,16 @@ public class TerrainGenerator : MonoBehaviour
 
         if(!(angleOfRay > -45f && angleOfRay < 135f)) {
             tilePos -= new Vector3Int((int)hitFrom.x, (int)hitFrom.y, 0);
+        }
+
+        TileData tileBroken = collidableTilemap.GetTile(tilePos) as TileData;
+
+        if(tileBroken != null) {
+            Placeable placeable = Instantiate(PlaceableItems.placeables[tileBroken.tileName]);
+
+            placeable.SetQuantity(1);
+
+            InventoryManager.AddItemToInventory(placeable);
         }
 
         collidableTilemap.SetTile(tilePos, null);

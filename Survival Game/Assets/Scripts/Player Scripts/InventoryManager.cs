@@ -6,10 +6,10 @@ using UnityEngine.UI;
 public class InventoryManager : MonoBehaviour
 {
     [Header("Inventory/Hotbar Variables")]
-    [SerializeField] private Item[] inventoryItems;
+    [SerializeField] private static Item[] inventoryItems;
     [SerializeField] private GameObject inventoryGO;
     
-    [SerializeField] private Item[] hotBarItems;
+    [SerializeField] private  static Item[] hotBarItems;
     [SerializeField] private GameObject hotBarGO;
 
 
@@ -78,17 +78,25 @@ public class InventoryManager : MonoBehaviour
     }
 
     private void HandleHotBarInputs() {
-        if(Input.GetAxis("Mouse ScrollWheel") > 0f) {slotSelected++;} // scroll up
-        if(Input.GetAxis("Mouse ScrollWheel") < 0f) {slotSelected--;} // scroll down
+        if(Input.GetAxis("Mouse ScrollWheel") > 0f) {slotSelected++; nextTimeToFire = 0f;} // scroll up
+        if(Input.GetAxis("Mouse ScrollWheel") < 0f) {slotSelected--; nextTimeToFire = 0f;} // scroll down
 
-        if(Input.GetKeyDown(KeyCode.Alpha1)) {slotSelected = 1;} // pressed one
-        if(Input.GetKeyDown(KeyCode.Alpha2)) {slotSelected = 2;} // pressed two
-        if(Input.GetKeyDown(KeyCode.Alpha3)) {slotSelected = 3;} // pressed three
-        if(Input.GetKeyDown(KeyCode.Alpha4)) {slotSelected = 4;} // pressed four
-        if(Input.GetKeyDown(KeyCode.Alpha5)) {slotSelected = 5;} // pressed five
-        if(Input.GetKeyDown(KeyCode.Alpha6)) {slotSelected = 6;} // pressed six
+        if(Input.GetKeyDown(KeyCode.Alpha1)) {slotSelected = 1; nextTimeToFire = 0f;} // pressed one
+        if(Input.GetKeyDown(KeyCode.Alpha2)) {slotSelected = 2; nextTimeToFire = 0f;} // pressed two
+        if(Input.GetKeyDown(KeyCode.Alpha3)) {slotSelected = 3; nextTimeToFire = 0f;} // pressed three
+        if(Input.GetKeyDown(KeyCode.Alpha4)) {slotSelected = 4; nextTimeToFire = 0f;} // pressed four
+        if(Input.GetKeyDown(KeyCode.Alpha5)) {slotSelected = 5; nextTimeToFire = 0f;} // pressed five
+        if(Input.GetKeyDown(KeyCode.Alpha6)) {slotSelected = 6; nextTimeToFire = 0f;} // pressed six
 
-        if(Input.GetMouseButtonDown(0) && itemSelectedInHand != null && !inventoryIsOpened) {itemSelectedInHand.Use();}
+        if(itemSelectedInHand == null) {
+            return;
+        }
+
+        if(Input.GetMouseButtonDown(0) && !inventoryIsOpened) {itemSelectedInHand.Use();}
+
+        if(Input.GetMouseButton(0) && itemSelectedInHand is not Tool) {
+            itemSelectedInHand.Use();
+        }
 
         if(Input.GetMouseButton(0) && itemSelectedInHand is Tool && Time.time >= nextTimeToFire) {
             nextTimeToFire = Time.time + 1f / itemSelectedInHand.GetToolSpeed();
@@ -484,7 +492,7 @@ public class InventoryManager : MonoBehaviour
         }
     }
 
-    public void AddItemToInventory(Item itemToAdd) {
+    public static void AddItemToInventory(Item itemToAdd) {
         int i = 0;
 
         // Try to add item to hotbar
