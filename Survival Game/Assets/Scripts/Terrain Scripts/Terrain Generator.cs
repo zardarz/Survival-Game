@@ -13,6 +13,10 @@ public class TerrainGenerator : MonoBehaviour
     private static Dictionary<string, TileData[]> tiles = new Dictionary<string, TileData[]>();
 
     private RandomTextureGenerator randomTextureGenerator;
+
+    [SerializeField] private TileType[] tileTypes;
+
+    [SerializeField] private int radiusOfIsland;
     
     void Start() {
 
@@ -23,11 +27,7 @@ public class TerrainGenerator : MonoBehaviour
 
         SetUpTiles();
 
-        for(int x = -50; x < 50; x++) {
-            for(int y = -50; y < 50; y++) {
-                PlaceBlock(x, y, "Wood", true);
-            }
-        }
+        GenerateIsland();
     }
 
     private TileData[] GetTiles(string tileName) {
@@ -126,4 +126,48 @@ public class TerrainGenerator : MonoBehaviour
 
         collidableTilemap.SetTile(tilePos, null);
     }
+
+    private TileData GetTileDataFromHeight(float height) {
+        for(int i = tileTypes.Length - 1; i >= 0; i--) {
+            if(height > tileTypes[i].height) {
+                TileData tileData = GetRandomTile(tileTypes[i].elevationTileTypeName);
+                return tileData;
+            }
+        }
+
+        throw new System.Exception("oh no");
+    }
+
+    private void GenerateIsland() {
+        AnimationCurve terrainCurve = new AnimationCurve();
+
+        int amountOfKeys = Random.Range(1, 10);
+        float keyJump = 1f / amountOfKeys;
+
+        for (int i = 0; i < amountOfKeys + 1; i++) {
+            float keyTime = i * keyJump;
+            float keyHeight = Random.Range(0, 100) / 100f;
+
+            terrainCurve.AddKey(keyTime, keyHeight);
+        }
+
+        for(int x = -radiusOfIsland; x < radiusOfIsland; x++) {
+            for(int y = -radiusOfIsland; y < radiusOfIsland; y++) {
+
+                float dis = Vector2.Distance(new(0,0), new(x,y));
+
+                if(!(dis > radiusOfIsland)) {
+                    float height = terrainCurve.Evaluate(dis/radiusOfIsland) * Random.Range(0.9f,1f);
+
+                    if(dis / radiusOfIsland > 0.8f) {
+                        height *= -15 * Mathf.Pow(dis / radiusOfIsland - 0.8f, 2) + 1;
+                    }
+
+                    backgroundTilemap.SetTile(new(x,y) ,GetTileDataFromHeight(height));
+                }
+
+            }
+        }
+    }
+
 }
