@@ -21,3 +21,4 @@ MonoBehaviour:
   maxStack: 128
   tile: {fileID: 0}
   collidable: 1
+  placeableStrength: 8

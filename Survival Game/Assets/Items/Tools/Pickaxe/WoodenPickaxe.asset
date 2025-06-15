@@ -19,9 +19,9 @@ MonoBehaviour:
   generatedSprite: 0
   quantity: 1
   maxStack: 1
-  toolSpeed: 30
-  toolStrength: 0
-  toolRange: 10
+  toolSpeed: 2
+  toolStrength: 10
+  toolRange: 2
   collidableTileMap:
     serializedVersion: 2
     m_Bits: 256

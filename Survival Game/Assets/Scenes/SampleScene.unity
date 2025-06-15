@@ -4293,7 +4293,9 @@ MonoBehaviour:
   - elevationTileTypeName: Grass
     height: 0.301
   radiusOfIsland: 100
-  treeSpawnRate: 0
+  treeSpawnRate: 0.25
+  stoneScatterness: 0.497
+  stoneCircleRadius: 106
   tree: {fileID: 4767291034925210952, guid: a7edbf494440d48fa93d9d2ead4474e1, type: 3}
 --- !u!4 &909248375
 Transform:
@@ -4351,6 +4353,10 @@ MonoBehaviour:
     placeable: {fileID: 11400000, guid: e9e7722e79d8d4f41b5e764c9e31df0e, type: 2}
   - placeableName: Wood
     placeable: {fileID: 11400000, guid: f64f385d5d2fb4471943f21305a33247, type: 2}
+  - placeableName: Sand
+    placeable: {fileID: 11400000, guid: d1bc67253e3894f569560860a3b3509f, type: 2}
+  - placeableName: Water
+    placeable: {fileID: 11400000, guid: d76c281d4f53b4b8ba292dfe93a8825f, type: 2}
 --- !u!1 &927614349
 GameObject:
   m_ObjectHideFlags: 0
