@@ -40,9 +40,9 @@ public class InventoryManager : MonoBehaviour
     [Header("Test Items")]
     public Item testItem;
 
-    public Placeable testPlaceable;
+    public Item testPlaceable;
 
-    public Placeable testTestPlaceable;
+    public Item testTestPlaceable;
 
     void Start() {
         totalSlots = inventorySize.x * inventorySize.y;
@@ -92,7 +92,7 @@ public class InventoryManager : MonoBehaviour
             return;
         }
 
-        if(Input.GetMouseButtonDown(0) && !inventoryIsOpened) {itemSelectedInHand.Use();}
+        if(Input.GetMouseButtonDown(0) && !inventoryIsOpened && itemSelectedInHand is not Tool) {itemSelectedInHand.Use();}
 
         if(Input.GetMouseButton(0) && itemSelectedInHand is not Tool) {
             itemSelectedInHand.Use();
@@ -100,6 +100,8 @@ public class InventoryManager : MonoBehaviour
 
         if(Input.GetMouseButton(0) && itemSelectedInHand is Tool && Time.time >= nextTimeToFire) {
             nextTimeToFire = Time.time + 1f / itemSelectedInHand.GetToolSpeed();
+            hand.gameObject.GetComponent<Animator>().speed = itemSelectedInHand.GetToolSpeed();
+            hand.gameObject.GetComponent<Animator>().Play("Tool Use");
             itemSelectedInHand.Use();
         }
     }

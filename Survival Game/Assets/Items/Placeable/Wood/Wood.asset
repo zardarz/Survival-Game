@@ -10,14 +10,14 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 6ac865fa1157a48b593ad8a95255a0d7, type: 3}
-  m_Name: Another test
+  m_Name: Wood
   m_EditorClassIdentifier: 
-  itemName: Another test
-  sprite: {fileID: 21300000, guid: d0593b84b4f4f4e9a937548a71c40d35, type: 3}
+  itemName: Wood
+  sprite: {fileID: 21300000, guid: c7effa75565c547ab938b1a3ce79709b, type: 3}
   stackable: 1
   showWhenHolding: 1
-  generatedSprite: 1
-  quantity: 100
+  generatedSprite: 0
+  quantity: 1
   maxStack: 128
-  tile: {fileID: 0}
-  collidable: 0
+  tile: {fileID: 11400000, guid: 57d658db1384344ac84824264dc1a45d, type: 2}
+  collidable: 1

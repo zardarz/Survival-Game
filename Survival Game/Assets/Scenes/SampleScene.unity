@@ -3950,6 +3950,7 @@ GameObject:
   m_Component:
   - component: {fileID: 888328315}
   - component: {fileID: 888328316}
+  - component: {fileID: 888328317}
   m_Layer: 3
   m_Name: Selected Item
   m_TagString: Untagged
@@ -4013,17 +4014,38 @@ SpriteRenderer:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 2
-  m_Sprite: {fileID: 0}
+  m_Sprite: {fileID: 21300000, guid: 2e7700b32e97a452b96f1a72c53841ba, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
   m_FlipY: 0
   m_DrawMode: 0
-  m_Size: {x: 0.16, y: 0.16}
+  m_Size: {x: 1, y: 1}
   m_AdaptiveModeThreshold: 0.5
   m_SpriteTileMode: 0
-  m_WasSpriteAssigned: 0
+  m_WasSpriteAssigned: 1
   m_MaskInteraction: 0
   m_SpriteSortPoint: 0
+--- !u!95 &888328317
+Animator:
+  serializedVersion: 5
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 888328314}
+  m_Enabled: 1
+  m_Avatar: {fileID: 0}
+  m_Controller: {fileID: 9100000, guid: 72606246e54ae4085ba40129be3dd482, type: 2}
+  m_CullingMode: 0
+  m_UpdateMode: 0
+  m_ApplyRootMotion: 0
+  m_LinearVelocityBlending: 0
+  m_StabilizeFeet: 0
+  m_WarningMessage: 
+  m_HasTransformHierarchy: 1
+  m_AllowConstantClipSamplingOptimization: 1
+  m_KeepAnimatorStateOnDisable: 0
+  m_WriteDefaultValuesOnDisable: 0
 --- !u!1 &890909492
 GameObject:
   m_ObjectHideFlags: 0
@@ -4271,6 +4293,8 @@ MonoBehaviour:
   - elevationTileTypeName: Grass
     height: 0.301
   radiusOfIsland: 100
+  treeSpawnRate: 0
+  tree: {fileID: 4767291034925210952, guid: a7edbf494440d48fa93d9d2ead4474e1, type: 3}
 --- !u!4 &909248375
 Transform:
   m_ObjectHideFlags: 0
@@ -4325,6 +4349,8 @@ MonoBehaviour:
     placeable: {fileID: 11400000, guid: 99098a769b99449babae04f47e81edbd, type: 2}
   - placeableName: Grass
     placeable: {fileID: 11400000, guid: e9e7722e79d8d4f41b5e764c9e31df0e, type: 2}
+  - placeableName: Wood
+    placeable: {fileID: 11400000, guid: f64f385d5d2fb4471943f21305a33247, type: 2}
 --- !u!1 &927614349
 GameObject:
   m_ObjectHideFlags: 0
@@ -9979,7 +10005,7 @@ MonoBehaviour:
   droppingItemStrength: 6
   testItem: {fileID: 11400000, guid: ea4b3cebdfd50443fb92e9d8b38cc9c2, type: 2}
   testPlaceable: {fileID: 11400000, guid: 99098a769b99449babae04f47e81edbd, type: 2}
-  testTestPlaceable: {fileID: 11400000, guid: 8cf155a6bfd8c4d19b8598bd82b48f9b, type: 2}
+  testTestPlaceable: {fileID: 11400000, guid: 4fe203689ab4f4fb4bce0725d637ada8, type: 2}
 --- !u!1 &2067448353
 GameObject:
   m_ObjectHideFlags: 0

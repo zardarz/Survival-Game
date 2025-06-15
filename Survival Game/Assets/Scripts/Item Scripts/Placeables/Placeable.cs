@@ -8,6 +8,8 @@ public class Placeable : Item
 
     [SerializeField] private bool collidable;
 
+    [SerializeField] private float placeableStrength;
+
     public override void Use() {
         Vector2 mousePos = Camera.main.ScreenToWorldPoint(Input.mousePosition);
 
@@ -21,5 +23,9 @@ public class Placeable : Item
 
     public bool GetCollidable() {
         return collidable;
+    }
+
+    public float GetPlaceabledStrength() {
+        return placeableStrength;
     }
 }

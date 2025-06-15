@@ -5,4 +5,5 @@ using UnityEngine.Tilemaps;
 public class TileData : Tile
 {
     public string tileName;
+    public float tileStrength;
 }
