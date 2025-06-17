@@ -10006,6 +10006,7 @@ MonoBehaviour:
   hotBarGO: {fileID: 1715273000}
   slotSelected: 1
   hand: {fileID: 888328316}
+  placeableFireRate: 5
   selectedItemWithCursorGO: {fileID: 1387408346}
   droppedItemPrefab: {fileID: 1296326589306400978, guid: eebe6493ef5f74864946fc734cac983e, type: 3}
   droppingItemStrength: 6

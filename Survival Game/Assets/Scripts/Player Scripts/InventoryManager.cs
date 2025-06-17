@@ -19,12 +19,17 @@ public class InventoryManager : MonoBehaviour
     [SerializeField] private SpriteRenderer hand;
 
     // Inventory settings
-    private Vector2Int inventorySize = new Vector2Int(3,6);
+    private Vector2Int inventorySize = new Vector2Int(3,6); // i know the x and y should be flipped but i realized too late and it breaks when you fix it
     private int totalSlots;
     private bool inventoryIsOpened;
 
     // Fire rate stuff
     private float nextTimeToFire;
+
+    // fire rate for placeables
+    private float nextTimeToFireForPlaceables;
+    [Range(0,39)]
+    [SerializeField] private float placeableFireRate;
 
 
     [Header("Inventory Swapping")]
@@ -93,10 +98,6 @@ public class InventoryManager : MonoBehaviour
         }
 
         if(Input.GetMouseButtonDown(0) && !inventoryIsOpened && itemSelectedInHand is not Tool) {itemSelectedInHand.Use();}
-
-        if(Input.GetMouseButton(0) && itemSelectedInHand is not Tool) {
-            itemSelectedInHand.Use();
-        }
 
         if(Input.GetMouseButton(0) && itemSelectedInHand is Tool && Time.time >= nextTimeToFire) {
             nextTimeToFire = Time.time + 1f / itemSelectedInHand.GetToolSpeed();

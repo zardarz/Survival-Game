@@ -126,10 +126,10 @@ public class TerrainGenerator : MonoBehaviour
     public static void BreakBlock(RaycastHit2D hit, float toolStrength) {
         Vector3Int tilePos = collidableTilemap.WorldToCell(hit.point);
 
-        Vector3 hitFrom = hit.normal;
+        Vector3 hitNormal = hit.normal;
 
         if(collidableTilemap.GetTile(tilePos) == null) {
-            tilePos -= new Vector3Int((int) hitFrom.x, (int) hitFrom.y, 0);
+            tilePos -= new Vector3Int((int) hitNormal.x, (int) hitNormal.y, 0);
         }
 
         TileData tileBroken = collidableTilemap.GetTile(tilePos) as TileData;
