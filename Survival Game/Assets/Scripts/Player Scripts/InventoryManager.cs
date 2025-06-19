@@ -26,11 +26,6 @@ public class InventoryManager : MonoBehaviour
     // Fire rate stuff
     private float nextTimeToFire;
 
-    // fire rate for placeables
-    private float nextTimeToFireForPlaceables;
-    [Range(0,39)]
-    [SerializeField] private float placeableFireRate;
-
 
     [Header("Inventory Swapping")]
     [SerializeField] private GameObject selectedItemWithCursorGO;
@@ -48,6 +43,10 @@ public class InventoryManager : MonoBehaviour
     public Item testPlaceable;
 
     public Item testTestPlaceable;
+
+    [Header("Crafting UI Refrences")]
+
+    [SerializeField] private GameObject craftingInterface;
 
     void Start() {
         totalSlots = inventorySize.x * inventorySize.y;
@@ -83,9 +82,6 @@ public class InventoryManager : MonoBehaviour
     }
 
     private void HandleHotBarInputs() {
-        if(Input.GetAxis("Mouse ScrollWheel") > 0f) {slotSelected++; nextTimeToFire = 0f;} // scroll up
-        if(Input.GetAxis("Mouse ScrollWheel") < 0f) {slotSelected--; nextTimeToFire = 0f;} // scroll down
-
         if(Input.GetKeyDown(KeyCode.Alpha1)) {slotSelected = 1; nextTimeToFire = 0f;} // pressed one
         if(Input.GetKeyDown(KeyCode.Alpha2)) {slotSelected = 2; nextTimeToFire = 0f;} // pressed two
         if(Input.GetKeyDown(KeyCode.Alpha3)) {slotSelected = 3; nextTimeToFire = 0f;} // pressed three
@@ -97,7 +93,9 @@ public class InventoryManager : MonoBehaviour
             return;
         }
 
-        if(Input.GetMouseButtonDown(0) && !inventoryIsOpened && itemSelectedInHand is not Tool) {itemSelectedInHand.Use();}
+        if(inventoryIsOpened) {return;}
+
+        if(Input.GetMouseButtonDown(0) && itemSelectedInHand is not Tool) {itemSelectedInHand.Use();}
 
         if(Input.GetMouseButton(0) && itemSelectedInHand is Tool && Time.time >= nextTimeToFire) {
             nextTimeToFire = Time.time + 1f / itemSelectedInHand.GetToolSpeed();
@@ -113,26 +111,29 @@ public class InventoryManager : MonoBehaviour
     }
 
     private void SetItemSelected() {
-        if(hotBarItems[slotSelected - 1] == null) {itemSelectedInHand = null; hideSelectedItem();} else {
+        if(hotBarItems[slotSelected - 1] == null) { 
+            itemSelectedInHand = null;
+            HideSelectedItem();
+            } else {
             itemSelectedInHand = hotBarItems[slotSelected - 1]; // get the selected item
         }
     }
 
     private void TryToShowSelectedItem() {
-        if(itemSelectedInHand == null) {return;}
+        if(itemSelectedInHand == null || inventoryIsOpened) {return;}
 
         if(Input.GetMouseButton(0) || itemSelectedInHand.GetShowWhenHolding()) { // if the mouse button is down or the item should be shown we show it
-            showSelectedItem();
+            ShowSelectedItem();
         } else { // else we hide it
-            hideSelectedItem();
+            HideSelectedItem();
         }
     }
 
-    private void showSelectedItem() {
+    private void ShowSelectedItem() {
         hand.sprite = itemSelectedInHand.GetSprite();
     }
 
-    private void hideSelectedItem() {
+    private void HideSelectedItem() {
         hand.sprite = null;
     }
 
@@ -277,6 +278,16 @@ public class InventoryManager : MonoBehaviour
         } else {
             inventoryGO.transform.parent.gameObject.SetActive(true);
             inventoryIsOpened = true;
+        }
+
+        ToggleCraftingInterface();
+    }
+
+    private void ToggleCraftingInterface() {
+        if(craftingInterface.activeSelf) {
+            craftingInterface.SetActive(false);
+        } else {
+            craftingInterface.SetActive(true);
         }
     }
 
