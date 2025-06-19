@@ -12,6 +12,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 45c7d5630ae044c44818eb6bc0c54173, type: 3}
   m_Name: Wooden Axe Crafting Recipe
   m_EditorClassIdentifier: 
-  craftingIngredients: []
-  resultingItem: {fileID: 0}
+  craftingIngredients:
+  - CraftingIngredientItem: {fileID: 11400000, guid: f64f385d5d2fb4471943f21305a33247, type: 2}
+    CraftingIngredientQuantity: 3
+  resultingItem: {fileID: 11400000, guid: 4fe203689ab4f4fb4bce0725d637ada8, type: 2}
   resultingItemQuantity: 1

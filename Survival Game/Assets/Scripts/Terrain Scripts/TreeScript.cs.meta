@@ -3,7 +3,9 @@ guid: b029f7142daf14c6e8a022b5783a27a0
 MonoImporter:
   externalObjects: {}
   serializedVersion: 2
-  defaultReferences: []
+  defaultReferences:
+  - typeOfWoodDrop: {fileID: 11400000, guid: f64f385d5d2fb4471943f21305a33247, type: 2}
+  - droppedItemPrefab: {fileID: 1296326589306400978, guid: eebe6493ef5f74864946fc734cac983e, type: 3}
   executionOrder: 0
   icon: {instanceID: 0}
   userData: 

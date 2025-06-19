@@ -6,6 +6,8 @@ public class Item : ScriptableObject
     [Header("Item")]
     [SerializeField] private string itemName;
 
+    [SerializeField] private string description = "This item has no description";
+
     [SerializeField] private Sprite sprite;
 
     [SerializeField] private bool stackable;
@@ -86,5 +88,9 @@ public class Item : ScriptableObject
 
     public virtual float GetToolSpeed() {
         return -1f;
+    }
+
+    public string GetToolDescription() {
+        return description;
     }
 }

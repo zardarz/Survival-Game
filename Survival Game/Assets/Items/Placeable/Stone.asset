@@ -13,6 +13,7 @@ MonoBehaviour:
   m_Name: Stone
   m_EditorClassIdentifier: 
   itemName: Stone
+  description: rock
   sprite: {fileID: 0}
   stackable: 1
   showWhenHolding: 1

@@ -13,11 +13,12 @@ MonoBehaviour:
   m_Name: Wood
   m_EditorClassIdentifier: 
   itemName: Wood
+  description: Used for many things
   sprite: {fileID: 21300000, guid: c7effa75565c547ab938b1a3ce79709b, type: 3}
   stackable: 1
   showWhenHolding: 1
   generatedSprite: 0
-  quantity: 1
+  quantity: 128
   maxStack: 128
   tile: {fileID: 11400000, guid: 57d658db1384344ac84824264dc1a45d, type: 2}
   collidable: 1

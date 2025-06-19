@@ -13,6 +13,7 @@ MonoBehaviour:
   m_Name: WoodenPickaxe
   m_EditorClassIdentifier: 
   itemName: WoodenPickaxe
+  description: Helpfull for picking
   sprite: {fileID: 21300000, guid: 2e7700b32e97a452b96f1a72c53841ba, type: 3}
   stackable: 0
   showWhenHolding: 0
