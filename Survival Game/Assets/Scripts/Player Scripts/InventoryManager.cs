@@ -281,11 +281,9 @@ public class InventoryManager : MonoBehaviour
             inventoryGO.transform.parent.gameObject.SetActive(true);
             inventoryIsOpened = true;
         }
-
-        ToggleCraftingInterface();
     }
 
-    private void ToggleCraftingInterface() {
+    public void ToggleCraftingInterface() {
         if(craftingInterface.activeSelf) {
             craftingInterface.SetActive(false);
         } else {

@@ -1,6 +1,6 @@
 using UnityEngine;
 
-[CreateAssetMenu(fileName = "New Pickaxe", menuName = "Pickaxe")]
+[CreateAssetMenu(fileName = "New Pickaxe", menuName = "Tool/Pickaxe")]
 public class Pickaxe : Tool
 {
 

@@ -1,6 +1,6 @@
 using UnityEngine;
 
-[CreateAssetMenu(fileName = "New Axe", menuName = "Axe")]
+[CreateAssetMenu(fileName = "New Axe", menuName = "Tool/Axe")]
 public class Axe : Tool
 {
 

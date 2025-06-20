@@ -204,7 +204,7 @@ public class TerrainGenerator : MonoBehaviour
         }
 
 
-        // make stone circles
+        // make stone circle
 
         float randomAngle = UnityEngine.Random.Range(0,2 * Mathf.PI);
         Vector2Int stoneCirclePos = new Vector2Int((int) Mathf.Round(Mathf.Cos(randomAngle) * (radiusOfIsland/0.9f)), (int) Mathf.Round(Mathf.Sin(randomAngle) * (radiusOfIsland/.9f)));

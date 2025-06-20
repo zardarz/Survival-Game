@@ -14,12 +14,12 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   itemName: Water
   description: how did you get this
-  sprite: {fileID: 21300000, guid: d0593b84b4f4f4e9a937548a71c40d35, type: 3}
+  sprite: {fileID: 0}
   stackable: 1
   showWhenHolding: 1
   generatedSprite: 1
   quantity: 1
   maxStack: 128
   tile: {fileID: 0}
-  collidable: 0
-  placeableStrength: -1
+  collidable: 1
+  placeableStrength: 100000000
