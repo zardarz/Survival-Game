@@ -18,7 +18,7 @@ MonoBehaviour:
   stackable: 1
   showWhenHolding: 1
   generatedSprite: 0
-  quantity: 128
+  quantity: 1
   maxStack: 128
   tile: {fileID: 11400000, guid: 57d658db1384344ac84824264dc1a45d, type: 2}
   collidable: 1

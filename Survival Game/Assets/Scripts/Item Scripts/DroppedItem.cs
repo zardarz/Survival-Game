@@ -39,6 +39,7 @@ public class DroppedItem : MonoBehaviour
         if(item == null) {
             return;
         }
+
         gameObject.GetComponent<SpriteRenderer>().sprite = item.GetSprite();
     }
 }

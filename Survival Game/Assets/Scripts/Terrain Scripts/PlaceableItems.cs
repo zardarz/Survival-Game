@@ -10,7 +10,12 @@ public class PlaceableItems : MonoBehaviour
     void Awake()
     {
         for(int i = 0; i < placeableTileEntries.Length; i++) {
-            placeables.Add(placeableTileEntries[i].placeableName, placeableTileEntries[i].placeable);
+            placeables.Add(placeableTileEntries[i].placeableName, Instantiate(placeableTileEntries[i].placeable));
+
+            if(placeables[placeableTileEntries[i].placeableName].GetGeneratedSprite()) {
+                placeables[placeableTileEntries[i].placeableName].GenerateSprite();
+                placeables[placeableTileEntries[i].placeableName].SpriteWasGenerated();
+            }
         }
     }
 }

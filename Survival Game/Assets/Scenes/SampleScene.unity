@@ -5363,6 +5363,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c7ce5e648f9634d0bbe07df7a50f5af6, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  droppedItemPrefab: {fileID: 1296326589306400978, guid: eebe6493ef5f74864946fc734cac983e, type: 3}
   tileTypes:
   - elevationTileTypeName: Water
     height: 0
@@ -5372,7 +5373,6 @@ MonoBehaviour:
     height: 0.301
   radiusOfIsland: 100
   treeSpawnRate: 0.25
-  stoneScatterness: 0.497
   stoneCircleRadius: 106
   tree: {fileID: 4767291034925210952, guid: a7edbf494440d48fa93d9d2ead4474e1, type: 3}
 --- !u!4 &909248375

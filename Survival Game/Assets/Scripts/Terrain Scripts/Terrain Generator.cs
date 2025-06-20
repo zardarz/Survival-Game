@@ -1,6 +1,5 @@
 using System;
 using System.Collections.Generic;
-using System.ComponentModel;
 using UnityEngine;
 using UnityEngine.Tilemaps;
 
@@ -11,6 +10,9 @@ public class TerrainGenerator : MonoBehaviour
     [Header("Refrences")]
     [SerializeField] private static Tilemap backgroundTilemap;
     [SerializeField] private static Tilemap collidableTilemap;
+
+    [SerializeField] private GameObject droppedItemPrefab;
+    private static GameObject staticDroppedItemPrefab;
 
     private static Dictionary<string, TileData[]> tiles = new Dictionary<string, TileData[]>();
 
@@ -25,9 +27,6 @@ public class TerrainGenerator : MonoBehaviour
     [Range(0,1)]
     [SerializeField] private float treeSpawnRate;
 
-    [Range(0,1)]
-    [SerializeField] private float stoneScatterness;
-
     [SerializeField] private int stoneCircleRadius;
 
     [Header("Evniorment Piceaces (what ever)")]
@@ -35,7 +34,11 @@ public class TerrainGenerator : MonoBehaviour
 
     private static Vector3Int brokenBlockPosition;
 
-    
+
+    void Awake() {
+        staticDroppedItemPrefab = droppedItemPrefab;
+    }
+
     void Start() {
 
         randomTextureGenerator = gameObject.GetComponent<RandomTextureGenerator>();
@@ -142,15 +145,26 @@ public class TerrainGenerator : MonoBehaviour
             return;
         }
 
+        collidableTilemap.SetTile(tilePos, null);
+
         Placeable placeable = Instantiate(PlaceableItems.placeables[tileBroken.tileName]);
 
         placeable.SetQuantity(1);
 
-        InventoryManager.AddItemToInventory(placeable);
+        GameObject droppedItem = Instantiate(staticDroppedItemPrefab);
+        DroppedItem droppedItemComponent = droppedItem.GetComponent<DroppedItem>();
+
+        droppedItem.transform.position = new Vector3(tilePos.x + 0.5f, tilePos.y + 0.5f, 0f);
+        droppedItemComponent.item = placeable;
+
+        droppedItemComponent.AddForceOnDrop(2);
+        droppedItemComponent.AddRandomTorque(30);
+        droppedItemComponent.StartCotrotean(0.5f);
+
+        droppedItemComponent.ChangeSprite();
 
         brokenBlockPosition = tilePos;
 
-        collidableTilemap.SetTile(tilePos, null);
     }
 
     private TileData GetTileDataFromHeight(float height) {
