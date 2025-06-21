@@ -1,4 +1,6 @@
 using System.Collections;
+using System.Collections.Generic;
+using System.Linq;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
@@ -47,6 +49,11 @@ public class InventoryManager : MonoBehaviour
     [Header("Crafting UI Refrences")]
 
     [SerializeField] private GameObject craftingInterface;
+    [SerializeField] private GameObject craftingInterfaceContent;
+    [SerializeField] private GameObject craftingRecipeContentPrefab;
+
+    // info for crafting
+    private List<CraftingRecipe> craftableCraftingRecipes = new List<CraftingRecipe>();
 
     void Start() {
         totalSlots = inventorySize.x * inventorySize.y;
@@ -284,9 +291,12 @@ public class InventoryManager : MonoBehaviour
     }
 
     public void ToggleCraftingInterface() {
+
         if(craftingInterface.activeSelf) {
             craftingInterface.SetActive(false);
         } else {
+            CalculateCraftableCraftingRecipes();
+            AddToCraftingInterfaceContent();
             craftingInterface.SetActive(true);
         }
     }
@@ -565,6 +575,77 @@ public class InventoryManager : MonoBehaviour
         if(other.gameObject.GetComponent<DroppedItem>() != null && other.gameObject.GetComponent<DroppedItem>().canBePickedup) { // if the collider has a dropped item componnent
             AddItemToInventory(other.gameObject.GetComponent<DroppedItem>().item); // we add it to the inventory
             Destroy(other.gameObject);
+        }
+    }
+
+    private void CalculateCraftableCraftingRecipes() {
+        craftableCraftingRecipes.Clear();
+
+        CraftingRecipe[] allCraftingRecipes = CraftingRecipes.craftingRecipes;
+
+        for(int i = 0; i < allCraftingRecipes.Length; i++) {
+            CraftingRecipe craftingRecipe = allCraftingRecipes[i];
+            CraftingIngredient[] craftingIngredients = craftingRecipe.craftingIngredients;
+
+            bool canCraftCraftable = true;
+
+            for(int craftingIngredientIndex = 0; craftingIngredientIndex < craftingIngredients.Length; craftingIngredientIndex++) {
+                CraftingIngredient craftingIngredient = craftingIngredients[craftingIngredientIndex];
+
+                Debug.Log(craftingIngredient.craftingIngredientItem.GetName());
+
+                if(false) {
+                    canCraftCraftable = false;
+                    break;
+                }
+            }
+
+            if(canCraftCraftable) {
+                craftableCraftingRecipes.Add(craftingRecipe);
+            }
+        }
+    }
+
+    private bool DoesPlayerHaveItem(Item itemToFind, int itemQuanity) {
+
+        if(itemToFind == null) {
+            Debug.Log("item to find is null");
+            return false;
+        }
+        
+        for(int i = 0; i < hotBarItems.Length; i++) {
+            Item currentItem = hotBarItems[i];
+
+            if(currentItem.Equals(itemToFind) && currentItem.GetQuantity() >= itemQuanity && currentItem != null) {
+                Debug.Log("Player Does Have " + itemQuanity + " " + itemToFind.GetName());
+                return true;
+            }
+        }
+
+        for(int i = 0; i < inventoryItems.Length; i++) {
+            Item currentItem = inventoryItems[i];
+
+            if(currentItem == null) continue;
+
+            if(currentItem.Equals(itemToFind) && currentItem.GetQuantity() >= itemQuanity && currentItem != null) {
+                Debug.Log("Player Does Have " + itemQuanity + " " + itemToFind.GetName());
+                return true;
+            }
+        }
+
+        return false;
+    }
+
+    private void AddToCraftingInterfaceContent() {
+
+        for(int i = 0; i < craftingInterfaceContent.transform.childCount; i++) {
+            Destroy(craftingInterfaceContent.transform.GetChild(i));
+        }
+
+        for(int i = 0; i < craftableCraftingRecipes.Count; i++) {
+            GameObject newContent = Instantiate(craftingRecipeContentPrefab);
+
+            newContent.GetComponent<Image>().sprite = craftableCraftingRecipes[i].resultingItem.GetSprite();
         }
     }
 }

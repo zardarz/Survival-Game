@@ -3,11 +3,11 @@ using UnityEngine;
 [CreateAssetMenu(fileName = "New Crafting Recipe", menuName = "Crafting Recipe")]
 public class CraftingRecipe : ScriptableObject
 {
-    [SerializeField] private CraftingIngredient[] craftingIngredients;
-    [SerializeField] private Item resultingItem;
-    [SerializeField] private int resultingItemQuantity = 1;
+    [SerializeField] private CraftingIngredient[] CraftingIngredients;
+    [SerializeField] private Item ResultingItem;
+    [SerializeField] private int ResultingItemQuantity = 1;
 
-    public CraftingIngredient[] CraftingIngredients => craftingIngredients;
-    public Item ResultingItem => resultingItem;
-    public int ResultingItemQuantity => resultingItemQuantity;
+    public CraftingIngredient[] craftingIngredients => CraftingIngredients;
+    public Item resultingItem => ResultingItem;
+    public int resultingItemQuantity => ResultingItemQuantity;
 }
