@@ -6,6 +6,6 @@ public class CraftingIngredient
     [SerializeField] private Item CraftingIngredientItem;
     [SerializeField] private uint CraftingIngredientQuantity;
 
-    public Item craftingIngredientItem => craftingIngredientItem;
-    public uint craftingIngredientQuantity => craftingIngredientQuantity;
+    public Item craftingIngredientItem => CraftingIngredientItem;
+    public uint craftingIngredientQuantity => CraftingIngredientQuantity;
 }

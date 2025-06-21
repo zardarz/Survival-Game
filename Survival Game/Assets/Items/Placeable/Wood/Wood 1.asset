@@ -10,10 +10,10 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 6ac865fa1157a48b593ad8a95255a0d7, type: 3}
-  m_Name: Wood
+  m_Name: Wood 1
   m_EditorClassIdentifier: 
   itemName: Wood
-  description: Wood
+  description: Used for many things
   sprite: {fileID: 21300000, guid: c7effa75565c547ab938b1a3ce79709b, type: 3}
   stackable: 1
   showWhenHolding: 1

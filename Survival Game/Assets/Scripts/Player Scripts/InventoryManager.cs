@@ -584,7 +584,7 @@ public class InventoryManager : MonoBehaviour
         CraftingRecipe[] allCraftingRecipes = CraftingRecipes.craftingRecipes;
 
         for(int i = 0; i < allCraftingRecipes.Length; i++) {
-            CraftingRecipe craftingRecipe = allCraftingRecipes[i];
+            CraftingRecipe craftingRecipe = Instantiate(allCraftingRecipes[i]);
             CraftingIngredient[] craftingIngredients = craftingRecipe.craftingIngredients;
 
             bool canCraftCraftable = true;
@@ -592,9 +592,7 @@ public class InventoryManager : MonoBehaviour
             for(int craftingIngredientIndex = 0; craftingIngredientIndex < craftingIngredients.Length; craftingIngredientIndex++) {
                 CraftingIngredient craftingIngredient = craftingIngredients[craftingIngredientIndex];
 
-                Debug.Log(craftingIngredient.craftingIngredientItem.GetName());
-
-                if(false) {
+                if(!DoesPlayerHaveItem(craftingIngredient.craftingIngredientItem, (int) craftingIngredient.craftingIngredientQuantity)) {
                     canCraftCraftable = false;
                     break;
                 }
@@ -616,8 +614,9 @@ public class InventoryManager : MonoBehaviour
         for(int i = 0; i < hotBarItems.Length; i++) {
             Item currentItem = hotBarItems[i];
 
+            if(currentItem == null) continue;
+
             if(currentItem.Equals(itemToFind) && currentItem.GetQuantity() >= itemQuanity && currentItem != null) {
-                Debug.Log("Player Does Have " + itemQuanity + " " + itemToFind.GetName());
                 return true;
             }
         }
@@ -628,7 +627,6 @@ public class InventoryManager : MonoBehaviour
             if(currentItem == null) continue;
 
             if(currentItem.Equals(itemToFind) && currentItem.GetQuantity() >= itemQuanity && currentItem != null) {
-                Debug.Log("Player Does Have " + itemQuanity + " " + itemToFind.GetName());
                 return true;
             }
         }
@@ -639,11 +637,11 @@ public class InventoryManager : MonoBehaviour
     private void AddToCraftingInterfaceContent() {
 
         for(int i = 0; i < craftingInterfaceContent.transform.childCount; i++) {
-            Destroy(craftingInterfaceContent.transform.GetChild(i));
+            Destroy(craftingInterfaceContent.transform.GetChild(i).gameObject);
         }
 
         for(int i = 0; i < craftableCraftingRecipes.Count; i++) {
-            GameObject newContent = Instantiate(craftingRecipeContentPrefab);
+            GameObject newContent = Instantiate(craftingRecipeContentPrefab, craftingInterfaceContent.GetComponent<RectTransform>());
 
             newContent.GetComponent<Image>().sprite = craftableCraftingRecipes[i].resultingItem.GetSprite();
         }
