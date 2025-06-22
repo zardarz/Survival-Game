@@ -86,11 +86,7 @@ public class Item : ScriptableObject
         return maxStack;
     }
 
-    public virtual float GetToolSpeed() {
-        return -1f;
-    }
-
-    public string GetToolDescription() {
+    public string GetDescription() {
         return description;
     }
 }

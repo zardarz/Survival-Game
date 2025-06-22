@@ -10,18 +10,18 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 76d0d43b471f346378c892d42f908cf2, type: 3}
-  m_Name: WoodenPickaxe
+  m_Name: Stone Pickaxe
   m_EditorClassIdentifier: 
-  itemName: Wooden Pickaxe
-  description: Helpfull for picking
-  sprite: {fileID: 21300000, guid: 2e7700b32e97a452b96f1a72c53841ba, type: 3}
+  itemName: Stone Pickaxe
+  description: More helpful for picking things
+  sprite: {fileID: 21300000, guid: 0e471cac3457e41fbae8c53593e263d7, type: 3}
   stackable: 0
   showWhenHolding: 0
   generatedSprite: 0
   quantity: 1
   maxStack: 1
-  toolSpeed: 2
-  toolStrength: 10
+  toolSpeed: 3
+  toolStrength: 15
   toolRange: 2
   collidableTileMap:
     serializedVersion: 2

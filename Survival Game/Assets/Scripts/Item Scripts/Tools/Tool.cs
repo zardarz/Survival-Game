@@ -8,7 +8,7 @@ public class Tool : Item
     [SerializeField] private float toolStrength;
     [SerializeField] public float toolRange;
 
-    public override float GetToolSpeed() {
+    public float GetToolSpeed() {
         return toolSpeed;
     }
 

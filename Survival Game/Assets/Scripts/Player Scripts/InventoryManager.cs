@@ -1,9 +1,8 @@
-using System.Collections;
 using System.Collections.Generic;
-using System.Linq;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
+using UnityEngine.EventSystems;
 
 public class InventoryManager : MonoBehaviour
 {
@@ -35,25 +34,28 @@ public class InventoryManager : MonoBehaviour
     private TMP_Text selectedItemWithCursorCount;
     private Item itemSelectedWithCursor;
 
+    private bool canUseItem = true;
+
     [Header("Dropping Items")]
     [SerializeField] private GameObject droppedItemPrefab;
     [SerializeField] private float droppingItemStrength;
-
-    [Header("Test Items")]
-    public Item testItem;
-
-    public Item testPlaceable;
-
-    public Item testTestPlaceable;
 
     [Header("Crafting UI Refrences")]
 
     [SerializeField] private GameObject craftingInterface;
     [SerializeField] private GameObject craftingInterfaceContent;
     [SerializeField] private GameObject craftingRecipeContentPrefab;
+    [SerializeField] private Image selectedCraftingRecipeResultingItemImage;
+    [SerializeField] private TMP_Text selectedCraftingRecipeResultingItemName;
+    [SerializeField] private TMP_Text selectedCraftingRecipeResultingItemDescription;
+    [SerializeField] private GameObject craftingSelectionGO;
+
+    [SerializeField] private CraftingRecipe craftingRecipeForCraftingStation;
 
     // info for crafting
     private List<CraftingRecipe> craftableCraftingRecipes = new List<CraftingRecipe>();
+
+    private CraftingRecipe selectedCraftingRecipe;
 
     void Start() {
         totalSlots = inventorySize.x * inventorySize.y;
@@ -63,12 +65,6 @@ public class InventoryManager : MonoBehaviour
 
         selectedItemWithCursorImage = selectedItemWithCursorGO.GetComponent<Image>();
         selectedItemWithCursorCount = selectedItemWithCursorGO.transform.GetChild(0).GetComponent<TMP_Text>();
-
-        AddItemToInventory(Instantiate(testItem));
-        AddItemToInventory(Instantiate(testPlaceable));
-        AddItemToInventory(Instantiate(testTestPlaceable));
-        AddItemToInventory(Instantiate(testItem));
-        AddItemToInventory(Instantiate(testPlaceable));
     }
 
     void Update() {
@@ -100,15 +96,24 @@ public class InventoryManager : MonoBehaviour
             return;
         }
 
-        if(inventoryIsOpened) {return;}
+        if(canUseItem == false) {return;}
 
-        if(Input.GetMouseButtonDown(0) && itemSelectedInHand is not Tool) {itemSelectedInHand.Use();}
+        if(Input.GetMouseButtonDown(0) && itemSelectedInHand is not Tool && itemSelectedInHand is not Weapon) {itemSelectedInHand.Use();}
 
         if(Input.GetMouseButton(0) && itemSelectedInHand is Tool && Time.time >= nextTimeToFire) {
-            nextTimeToFire = Time.time + 1f / itemSelectedInHand.GetToolSpeed();
-            hand.gameObject.GetComponent<Animator>().speed = itemSelectedInHand.GetToolSpeed();
+            Tool toolSelectedInHand = itemSelectedInHand as Tool;
+            nextTimeToFire = Time.time + 1f / toolSelectedInHand.GetToolSpeed();
+            hand.gameObject.GetComponent<Animator>().speed = toolSelectedInHand.GetToolSpeed();
             hand.gameObject.GetComponent<Animator>().Play("Tool Use");
-            itemSelectedInHand.Use();
+            toolSelectedInHand.Use();
+        }
+
+        if(Input.GetMouseButton(0) && itemSelectedInHand is Weapon && Time.time >= nextTimeToFire) {
+            Weapon weaponSelectedInHand = itemSelectedInHand as Weapon;
+            nextTimeToFire = Time.time + 1f / weaponSelectedInHand.GetWeaponSpeed();
+            hand.gameObject.GetComponent<Animator>().speed = weaponSelectedInHand.GetWeaponSpeed();
+            hand.gameObject.GetComponent<Animator>().Play("Sword Animation");
+            weaponSelectedInHand.Use();
         }
     }
 
@@ -283,9 +288,11 @@ public class InventoryManager : MonoBehaviour
         // if the parent is active we set it to unactive and visersa
         if(inventoryGO.transform.parent.gameObject.activeSelf) {
             inventoryGO.transform.parent.gameObject.SetActive(false);
+            canUseItem = true;
             inventoryIsOpened = false;
         } else {
             inventoryGO.transform.parent.gameObject.SetActive(true);
+            canUseItem = false;
             inventoryIsOpened = true;
         }
     }
@@ -294,10 +301,13 @@ public class InventoryManager : MonoBehaviour
 
         if(craftingInterface.activeSelf) {
             craftingInterface.SetActive(false);
+            craftingSelectionGO.SetActive(false);
+            canUseItem = true;
         } else {
             CalculateCraftableCraftingRecipes();
             AddToCraftingInterfaceContent();
             craftingInterface.SetActive(true);
+            canUseItem = false;
         }
     }
 
@@ -610,14 +620,16 @@ public class InventoryManager : MonoBehaviour
             Debug.Log("item to find is null");
             return false;
         }
+
+        int totalAmountOfItemInventory = 0;
         
         for(int i = 0; i < hotBarItems.Length; i++) {
             Item currentItem = hotBarItems[i];
 
             if(currentItem == null) continue;
 
-            if(currentItem.Equals(itemToFind) && currentItem.GetQuantity() >= itemQuanity && currentItem != null) {
-                return true;
+            if(currentItem.Equals(itemToFind)) {
+                totalAmountOfItemInventory += currentItem.GetQuantity();
             }
         }
 
@@ -626,9 +638,13 @@ public class InventoryManager : MonoBehaviour
 
             if(currentItem == null) continue;
 
-            if(currentItem.Equals(itemToFind) && currentItem.GetQuantity() >= itemQuanity && currentItem != null) {
-                return true;
+            if(currentItem.Equals(itemToFind)) {
+                totalAmountOfItemInventory += currentItem.GetQuantity();
             }
+        }
+
+        if(totalAmountOfItemInventory >= itemQuanity) {
+            return true;
         }
 
         return false;
@@ -644,6 +660,127 @@ public class InventoryManager : MonoBehaviour
             GameObject newContent = Instantiate(craftingRecipeContentPrefab, craftingInterfaceContent.GetComponent<RectTransform>());
 
             newContent.GetComponent<Image>().sprite = craftableCraftingRecipes[i].resultingItem.GetSprite();
+
+            newContent.GetComponent<SelectionForCraftingRecipe>().craftingRecipeOnCraftingOption = craftableCraftingRecipes[i];
+            
+            newContent.GetComponent<Button>().onClick.AddListener(ChangeSelectedCraftingRecipe);
         }
+    }
+
+    public void Craft() {
+        if(selectedCraftingRecipe == null || IsThereSpaceInInventory() == false) {
+            return;
+        }
+
+        for(int i = 0; i < selectedCraftingRecipe.craftingIngredients.Length; i++) {
+            CraftingIngredient craftingIngredient = selectedCraftingRecipe.craftingIngredients[i];
+
+            if(DoesPlayerHaveItem(craftingIngredient.craftingIngredientItem, (int) craftingIngredient.craftingIngredientQuantity)) {
+                RemoveItemFromInventory(craftingIngredient.craftingIngredientItem, (int) craftingIngredient.craftingIngredientQuantity);
+                CalculateCraftableCraftingRecipes();
+                AddToCraftingInterfaceContent();
+            } else {
+                selectedCraftingRecipe = null;
+                craftingSelectionGO.SetActive(false);
+                return;
+            }
+
+        }
+
+        for(int i = 0; i < selectedCraftingRecipe.resultingItemQuantity; i++) {
+            AddItemToInventory(selectedCraftingRecipe.resultingItem);
+        }
+
+        CalculateCraftableCraftingRecipes();
+    }
+
+    public void CraftCraftingStation() {
+        if(IsThereSpaceInInventory() == false) {
+            return;
+        }
+
+        for(int i = 0; i < craftingRecipeForCraftingStation.craftingIngredients.Length; i++) {
+            CraftingIngredient craftingIngredient = craftingRecipeForCraftingStation.craftingIngredients[i];
+
+            if(DoesPlayerHaveItem(craftingIngredient.craftingIngredientItem, (int) craftingIngredient.craftingIngredientQuantity)) {
+                RemoveItemFromInventory(craftingIngredient.craftingIngredientItem, (int) craftingIngredient.craftingIngredientQuantity);
+                CalculateCraftableCraftingRecipes();
+                AddToCraftingInterfaceContent();
+            } else {
+                return;
+            }
+
+        }
+
+        for(int i = 0; i < craftingRecipeForCraftingStation.resultingItemQuantity; i++) {
+            AddItemToInventory(Instantiate(craftingRecipeForCraftingStation.resultingItem));
+        }
+
+        CalculateCraftableCraftingRecipes();
+    }
+
+    private void RemoveItemFromInventory(Item itemToRemove, int quantityToRemove) {
+        int quantityLeftToRemove = quantityToRemove;
+
+        for(int i = 0; i < inventoryItems.Length; i++) {
+            Item currentItem = inventoryItems[i];
+
+            if(currentItem == null || !currentItem.Equals(itemToRemove)) continue;
+
+            if(currentItem.GetQuantity() >= quantityLeftToRemove) {
+                currentItem.AddToQuantity(-quantityLeftToRemove);
+                quantityLeftToRemove = 0;
+            } else {
+                quantityLeftToRemove -= currentItem.GetQuantity();
+                currentItem.SetQuantity(0);
+            }
+        }
+
+
+        for(int i = 0; i < hotBarItems.Length; i++) {
+            Item currentItem = hotBarItems[i];
+            
+            if(currentItem == null || !currentItem.Equals(itemToRemove)) continue;
+
+            if(currentItem.GetQuantity() >= quantityLeftToRemove) {
+                currentItem.AddToQuantity(-quantityLeftToRemove);
+                quantityLeftToRemove = 0;
+            } else {
+                quantityLeftToRemove -= currentItem.GetQuantity();
+                currentItem.SetQuantity(0);
+            }
+        }
+    }
+
+    public void ChangeSelectedCraftingRecipe() {
+        GameObject caller = EventSystem.current.currentSelectedGameObject;
+
+        selectedCraftingRecipe = caller.GetComponent<SelectionForCraftingRecipe>().craftingRecipeOnCraftingOption;
+
+        selectedCraftingRecipeResultingItemImage.sprite = selectedCraftingRecipe.resultingItem.GetSprite();
+
+        selectedCraftingRecipeResultingItemName.text = selectedCraftingRecipe.resultingItem.GetName();
+        
+        selectedCraftingRecipeResultingItemDescription.text = selectedCraftingRecipe.resultingItem.GetDescription();
+
+        craftingSelectionGO.SetActive(true);
+    }
+
+    private bool IsThereSpaceInInventory() {
+        foreach(Item item in hotBarItems) {
+            if(item == null) {
+                return true;
+            }
+        }
+
+
+        foreach(Item item in inventoryItems) {
+            if(item == null) {
+                return true;
+            }
+        }
+
+
+        return false;
     }
 }
