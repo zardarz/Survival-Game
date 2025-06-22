@@ -13,8 +13,9 @@ public class Hand : MonoBehaviour
     void FixedUpdate() {
         Vector2 lookDir = mousePos - rb.position;
         float angle = Mathf.Atan2(lookDir.y, lookDir.x) * Mathf.Rad2Deg;
+        if(angle > 90f || angle < -90f) {
+            angle += 180;
+        }
         rb.rotation = angle;
-
-        if(angle > 90f || angle < -90) {transform.GetChild(0).GetComponent<SpriteRenderer>().flipY = true;} else {transform.GetChild(0).GetComponent<SpriteRenderer>().flipY = false;}
     }
 }

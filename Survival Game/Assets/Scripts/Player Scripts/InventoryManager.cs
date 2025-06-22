@@ -17,7 +17,8 @@ public class InventoryManager : MonoBehaviour
     [Header("Showing What Item is Selected")]
     [SerializeField] private int slotSelected = 1;
     private Item itemSelectedInHand;
-    [SerializeField] private SpriteRenderer hand;
+    [SerializeField] private SpriteRenderer selectedItemInHandSpriteRenderer;
+    [SerializeField] private Transform hand;
 
     // Inventory settings
     private Vector2Int inventorySize = new Vector2Int(3,6); // i know the x and y should be flipped but i realized too late and it breaks when you fix it
@@ -103,16 +104,25 @@ public class InventoryManager : MonoBehaviour
         if(Input.GetMouseButton(0) && itemSelectedInHand is Tool && Time.time >= nextTimeToFire) {
             Tool toolSelectedInHand = itemSelectedInHand as Tool;
             nextTimeToFire = Time.time + 1f / toolSelectedInHand.GetToolSpeed();
-            hand.gameObject.GetComponent<Animator>().speed = toolSelectedInHand.GetToolSpeed();
-            hand.gameObject.GetComponent<Animator>().Play("Tool Use");
+            selectedItemInHandSpriteRenderer.gameObject.GetComponent<Animator>().speed = toolSelectedInHand.GetToolSpeed();
+            selectedItemInHandSpriteRenderer.gameObject.GetComponent<Animator>().Play("Tool Use");
             toolSelectedInHand.Use();
+        }
+
+        Vector2 dir = Camera.main.ScreenToWorldPoint(Input.mousePosition) - transform.position;
+        float angleOfHand = Mathf.Atan2(dir.y, dir.x) * Mathf.Rad2Deg;
+
+        if(angleOfHand >= 90f || angleOfHand <= -90f) {
+            hand.localScale = new(-1f,1f,1f);
+        } else {
+            hand.localScale = new(1f,1f,1f);
         }
 
         if(Input.GetMouseButton(0) && itemSelectedInHand is Weapon && Time.time >= nextTimeToFire) {
             Weapon weaponSelectedInHand = itemSelectedInHand as Weapon;
             nextTimeToFire = Time.time + 1f / weaponSelectedInHand.GetWeaponSpeed();
-            hand.gameObject.GetComponent<Animator>().speed = weaponSelectedInHand.GetWeaponSpeed();
-            hand.gameObject.GetComponent<Animator>().Play("Sword Animation");
+            selectedItemInHandSpriteRenderer.gameObject.GetComponent<Animator>().speed = weaponSelectedInHand.GetWeaponSpeed();
+            selectedItemInHandSpriteRenderer.gameObject.GetComponent<Animator>().Play("Sword Animation");
             weaponSelectedInHand.Use();
         }
     }
@@ -142,11 +152,11 @@ public class InventoryManager : MonoBehaviour
     }
 
     private void ShowSelectedItem() {
-        hand.sprite = itemSelectedInHand.GetSprite();
+        selectedItemInHandSpriteRenderer.sprite = itemSelectedInHand.GetSprite();
     }
 
     private void HideSelectedItem() {
-        hand.sprite = null;
+        selectedItemInHandSpriteRenderer.sprite = null;
     }
 
     private void SetHotBarSprites() {
@@ -266,7 +276,7 @@ public class InventoryManager : MonoBehaviour
         GameObject newDroppedItem = Instantiate(droppedItemPrefab); // make a dropped item prefab
         DroppedItem newDroppedItemDroppedItemComponent = newDroppedItem.GetComponent<DroppedItem>();
 
-        newDroppedItem.transform.position = hand.transform.position; // set its position to the player's hand position
+        newDroppedItem.transform.position = selectedItemInHandSpriteRenderer.transform.position; // set its position to the player's hand position
 
         Vector2 dir = (Camera.main.ScreenToWorldPoint(Input.mousePosition) - transform.position).normalized; // find the direction of the mouse relative to the player
 

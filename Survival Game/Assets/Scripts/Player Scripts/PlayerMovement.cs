@@ -14,12 +14,16 @@ public class PlayerMovement : MonoBehaviour
 
     public Vector2 movement;
 
+    void Awake()
+    {
+        playerTransform = transform;
+    }
+
     void Start() {
         // get the rigidbody, sprite rednerer and animator at the start of the game
         rb = gameObject.GetComponent<Rigidbody2D>();
         spriteRenderer = gameObject.GetComponent<SpriteRenderer>();
         animator = gameObject.GetComponent<Animator>();
-        playerTransform = transform;
     }
 
     void Update() {
