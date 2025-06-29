@@ -3,22 +3,46 @@ using UnityEngine;
 public class NormalZombieAI : MonoBehaviour
 {
 
-    private Transform playerTransform;
+    [SerializeField] private float minDisToChasePlayer;
+    private Transform player;
 
-    private Rigidbody2D rb;
+    private Animator animator;
 
-    [SerializeField] private float movmentSpeed;
+    private float disToPlayer;
 
-    void Start() {
-        playerTransform = PlayerMovement.GetPlayerTransform();
-        rb = gameObject.GetComponent<Rigidbody2D>();
-        gameObject.GetComponent<Animator>().speed = movmentSpeed;
+    private SpriteRenderer spriteRenderer;
+
+    void Start()
+    {
+        player = GameObject.FindGameObjectWithTag("Player").transform;
+        animator = gameObject.GetComponent<Animator>();
+        spriteRenderer = gameObject.GetComponent<SpriteRenderer>();
     }
 
     void Update()
     {
-        Vector2 vectorToMove = new Vector2(playerTransform.position.x - rb.position.x, playerTransform.position.y - rb.position.y).normalized * movmentSpeed;
+        disToPlayer = Vector2.Distance(transform.position, player.position);
 
-        rb.MovePosition(rb.position + vectorToMove * Time.fixedDeltaTime);
+        if(disToPlayer <= minDisToChasePlayer) {
+            animator.SetTrigger("StartChasingPlayer");
+        } else {
+            animator.SetTrigger("StopChasingPlayer");
+        }
+    }
+
+    public void LookAtPlayer()
+	{
+
+		if (transform.position.x > player.position.x){
+			spriteRenderer.flipX = true;
+		} else if (transform.position.x < player.position.x){
+            spriteRenderer.flipX = false;
+		}
+	}
+
+    void OnDrawGizmos()
+    {
+        Gizmos.color = Color.red;
+        Gizmos.DrawSphere(transform.position, minDisToChasePlayer);
     }
 }

@@ -13,9 +13,9 @@ GameObject:
   - component: {fileID: 2682528813042906806}
   - component: {fileID: 7114279450439467343}
   - component: {fileID: 7173906316440618632}
-  - component: {fileID: 1982636581370250835}
   - component: {fileID: -1550064647553948758}
-  m_Layer: 0
+  - component: {fileID: 4616188525800551905}
+  m_Layer: 10
   m_Name: Normal Zombie
   m_TagString: Damageable
   m_Icon: {fileID: 0}
@@ -121,7 +121,7 @@ BoxCollider2D:
   m_IsTrigger: 0
   m_UsedByEffector: 0
   m_UsedByComposite: 0
-  m_Offset: {x: 0.03142312, y: -0.09310961}
+  m_Offset: {x: -0.03, y: -0.09310961}
   m_SpriteTilingProperty:
     border: {x: 0, y: 0, z: 0, w: 0}
     pivot: {x: 0.5, y: 0.5}
@@ -174,7 +174,22 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   health: 30
---- !u!95 &1982636581370250835
+  particlePlayedOnDeath: {fileID: 2348940918557329946, guid: 55ca2a9ab23fd4abcbc68442e12e69ca, type: 3}
+  particlePlayedOnHit: {fileID: 2348940918557329946, guid: 55ca2a9ab23fd4abcbc68442e12e69ca, type: 3}
+--- !u!114 &-1550064647553948758
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 75069751187883742}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 45ca3b2a966a64fdd80bb6e724018ceb, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  minDisToChasePlayer: 0
+--- !u!95 &4616188525800551905
 Animator:
   serializedVersion: 5
   m_ObjectHideFlags: 0
@@ -195,16 +210,3 @@ Animator:
   m_AllowConstantClipSamplingOptimization: 1
   m_KeepAnimatorStateOnDisable: 0
   m_WriteDefaultValuesOnDisable: 0
---- !u!114 &-1550064647553948758
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 75069751187883742}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 45ca3b2a966a64fdd80bb6e724018ceb, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  movmentSpeed: 4

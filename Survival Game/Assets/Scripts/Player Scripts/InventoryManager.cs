@@ -99,30 +99,43 @@ public class InventoryManager : MonoBehaviour
 
         if(canUseItem == false) {return;}
 
+        Animator handSpriteAnimator = selectedItemInHandSpriteRenderer.gameObject.GetComponent<Animator>();
+
         if(Input.GetMouseButtonDown(0) && itemSelectedInHand is not Tool && itemSelectedInHand is not Weapon) {itemSelectedInHand.Use();}
 
-        if(Input.GetMouseButton(0) && itemSelectedInHand is Tool && Time.time >= nextTimeToFire) {
+        if(itemSelectedInHand is Sword) {
+            handSpriteAnimator.SetBool("isUsingSword", true);
+        } else {
+            handSpriteAnimator.SetBool("isUsingSword", false);
+        }
+
+        if(itemSelectedInHand is Tool) {
+            handSpriteAnimator.SetBool("isUsingTool", true);
+        } else {
+            handSpriteAnimator.SetBool("isUsingTool", false);
+        }
+
+        if(itemSelectedInHand is not Tool and not Sword) {
+            handSpriteAnimator.SetBool("isIdle", true);
+        } else {
+            handSpriteAnimator.SetBool("isIdle", false);
+        }
+
+        if(Input.GetMouseButton(0) == false) return;
+
+        if(itemSelectedInHand is Tool && Time.time >= nextTimeToFire) {
             Tool toolSelectedInHand = itemSelectedInHand as Tool;
             nextTimeToFire = Time.time + 1f / toolSelectedInHand.GetToolSpeed();
-            selectedItemInHandSpriteRenderer.gameObject.GetComponent<Animator>().speed = toolSelectedInHand.GetToolSpeed();
-            selectedItemInHandSpriteRenderer.gameObject.GetComponent<Animator>().Play("Tool Use");
+
+            handSpriteAnimator.speed = toolSelectedInHand.GetToolSpeed();
             toolSelectedInHand.Use();
         }
 
-        Vector2 dir = Camera.main.ScreenToWorldPoint(Input.mousePosition) - transform.position;
-        float angleOfHand = Mathf.Atan2(dir.y, dir.x) * Mathf.Rad2Deg;
-
-        if(angleOfHand >= 90f || angleOfHand <= -90f) {
-            hand.localScale = new(-1f,1f,1f);
-        } else {
-            hand.localScale = new(1f,1f,1f);
-        }
-
-        if(Input.GetMouseButton(0) && itemSelectedInHand is Weapon && Time.time >= nextTimeToFire) {
+        if(itemSelectedInHand is Weapon && Time.time >= nextTimeToFire) {
             Weapon weaponSelectedInHand = itemSelectedInHand as Weapon;
             nextTimeToFire = Time.time + 1f / weaponSelectedInHand.GetWeaponSpeed();
-            selectedItemInHandSpriteRenderer.gameObject.GetComponent<Animator>().speed = weaponSelectedInHand.GetWeaponSpeed();
-            selectedItemInHandSpriteRenderer.gameObject.GetComponent<Animator>().Play("Sword Animation");
+
+            handSpriteAnimator.speed = weaponSelectedInHand.GetWeaponSpeed();
             weaponSelectedInHand.Use();
         }
     }
