@@ -21,7 +21,7 @@ public class Zombie_Walking : StateMachineBehaviour
     override public void OnStateUpdate(Animator animator, AnimatorStateInfo stateInfo, int layerIndex)
     {
         Vector2 vectorToMove = (player.position - animator.transform.position).normalized;
-        rb.MovePosition((Vector2) animator.transform.position + vectorToMove * movementSpeed * Time.deltaTime);
+        rb.MovePosition((Vector2) animator.transform.position + vectorToMove * movementSpeed * Time.fixedDeltaTime);
 
         animator.GetComponent<NormalZombieAI>().LookAtPlayer();
     }

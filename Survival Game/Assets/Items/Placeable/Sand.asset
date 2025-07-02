@@ -13,6 +13,7 @@ MonoBehaviour:
   m_Name: Sand
   m_EditorClassIdentifier: 
   itemName: Sand
+  description: This item has no description
   sprite: {fileID: 21300000, guid: d0593b84b4f4f4e9a937548a71c40d35, type: 3}
   stackable: 1
   showWhenHolding: 1
@@ -21,4 +22,4 @@ MonoBehaviour:
   maxStack: 128
   tile: {fileID: 0}
   collidable: 0
-  placeableStrength: 3
+  placeableStrength: 1

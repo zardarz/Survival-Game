@@ -10,11 +10,11 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 76d0d43b471f346378c892d42f908cf2, type: 3}
-  m_Name: Best every pcikaxe every made int eh world
+  m_Name: The Pickaxe
   m_EditorClassIdentifier: 
-  itemName: yes
+  itemName: The Pickaxe
   description: This item has no description
-  sprite: {fileID: 21300000, guid: e888b32c3155b44d991f5d506cf52bce, type: 3}
+  sprite: {fileID: 21300000, guid: e01b14c91277343a8935142ff24fa60c, type: 3}
   stackable: 0
   showWhenHolding: 0
   generatedSprite: 0
@@ -22,7 +22,7 @@ MonoBehaviour:
   maxStack: 1
   toolSpeed: 30
   toolStrength: Infinity
-  toolRange: 1e+10
+  toolRange: Infinity
   collidableTileMap:
     serializedVersion: 2
     m_Bits: 256

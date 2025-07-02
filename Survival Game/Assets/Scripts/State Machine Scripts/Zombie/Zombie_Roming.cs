@@ -39,7 +39,7 @@ public class Zombie_Roming : StateMachineBehaviour
             spriteRenderer.flipX = false;
         }
 
-        rb.MovePosition((Vector2) animator.transform.position + movementVector * movementSpeed * Time.deltaTime);
+        rb.MovePosition((Vector2) animator.transform.position + movementVector * movementSpeed * Time.fixedDeltaTime);
     }
 
     // OnStateExit is called when a transition ends and the state machine finishes evaluating this state

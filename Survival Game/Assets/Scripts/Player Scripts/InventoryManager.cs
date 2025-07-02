@@ -606,7 +606,7 @@ public class InventoryManager : MonoBehaviour
     private void OnTriggerEnter2D(Collider2D other)
     {
         if(other.gameObject.GetComponent<DroppedItem>() != null && other.gameObject.GetComponent<DroppedItem>().canBePickedup) { // if the collider has a dropped item componnent
-            AddItemToInventory(other.gameObject.GetComponent<DroppedItem>().item); // we add it to the inventory
+            AddItemToInventory(Instantiate(other.gameObject.GetComponent<DroppedItem>().item)); // we add it to the inventory
             Destroy(other.gameObject);
         }
     }

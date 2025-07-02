@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Tilemaps;
+using Random = UnityEngine.Random;
 
 
 [RequireComponent(typeof(RandomTextureGenerator))]
@@ -32,6 +33,11 @@ public class TerrainGenerator : MonoBehaviour
     [Header("Evniorment Piceaces (what ever)")]
     [SerializeField] private GameObject tree;
 
+    [SerializeField] private GameObject graveyard;
+    [SerializeField] private int amountOfGraveyards = 2;
+    [SerializeField] private int graveyardGrassRadius;
+
+    // debug stuff
     private static Vector3Int brokenBlockPosition;
 
 
@@ -73,7 +79,7 @@ public class TerrainGenerator : MonoBehaviour
     public static bool PlaceBlock(Tile tile, int x, int y, string blockName, bool collidable) {
         Vector3Int pos = new Vector3Int(x, y, 0);
 
-        if(collidable && Physics2D.OverlapBoxAll(new Vector2(pos.x + 0.5f, pos.y + 0.5f), new Vector2(0.9f,0.9f), 0).Length != 0) {return false;}
+        if(collidable && Physics2D.OverlapBoxAll(new Vector2(x + 0.5f, y + 0.5f), new Vector2(0.9f,0.9f), 0).Length != 0) {return false;}
 
         Tilemap tilemap;
 
@@ -93,9 +99,10 @@ public class TerrainGenerator : MonoBehaviour
     }
 
     public static bool PlaceBlock(int x, int y, string blockName, bool collidable) {
+        //  get the position of the tile in a vector 3 int because that is what tilemaps use
         Vector3Int pos = new Vector3Int(x, y, 0);
 
-        if(collidable && Physics2D.OverlapBoxAll(new Vector2(pos.x + 0.5f, pos.y + 0.5f), new Vector2(0.9f,0.9f), 0).Length != 0 && collidableTilemap.GetTile(new(x,y,0)) == null) {return false;}
+        if(collidable && Physics2D.OverlapBoxAll(new Vector2(x + 0.5f, y + 0.5f), new Vector2(0.9f,0.9f), 0).Length != 0 && collidableTilemap.GetTile(new(x,y,0)) == null) {return false;}
 
         Tilemap tilemap;
 
@@ -112,7 +119,7 @@ public class TerrainGenerator : MonoBehaviour
 
     private static TileData GetRandomTile(string name) {
         if(tiles.TryGetValue(name, out TileData[] result)) {
-            TileData randomTile = result[UnityEngine.Random.Range(0,RandomTextureGenerator.amountOfUniqueRandomTextures)];
+            TileData randomTile = result[Random.Range(0,RandomTextureGenerator.amountOfUniqueRandomTextures)];
             return randomTile;
         }
 
@@ -159,7 +166,7 @@ public class TerrainGenerator : MonoBehaviour
 
         droppedItemComponent.AddForceOnDrop(2);
         droppedItemComponent.AddRandomTorque(30);
-        droppedItemComponent.StartCotrotean(0.5f);
+        droppedItemComponent.StartCotrotean(0f);
 
         droppedItemComponent.ChangeSprite();
 
@@ -175,21 +182,27 @@ public class TerrainGenerator : MonoBehaviour
             }
         }
 
-        throw new System.Exception("oh no");
+        throw new Exception("oh no");
     }
 
     private void GenerateIsland() {
+
+        // place water in a big square
+
+        for(int x = -radiusOfIsland*5; x < radiusOfIsland*5; x++) {
+            for(int y = -radiusOfIsland*5; y < radiusOfIsland*5; y++) {
+                PlaceBlock(x, y, "Water", false);
+            }
+        }
 
         // make the isalnd 
         for(int x = -radiusOfIsland; x < radiusOfIsland; x++) {
             for(int y = -radiusOfIsland; y < radiusOfIsland; y++) {
 
-                PlaceBlock(x,y, "Water", false);
-
                 float dis = Vector2.Distance(new(0,0), new(x,y));
 
                 if(!(dis > radiusOfIsland)) {
-                    float height = UnityEngine.Random.Range(0.9f,1f);
+                    float height = Random.Range(0.9f,1f);
 
                     if(dis / radiusOfIsland > 0.8f) {
                         height *= -25 * Mathf.Pow(dis / radiusOfIsland - 0.8f, 2) + 1;
@@ -206,11 +219,11 @@ public class TerrainGenerator : MonoBehaviour
 
         // make stone circle
 
-        float randomAngle = UnityEngine.Random.Range(0,2 * Mathf.PI);
-        Vector2Int stoneCirclePos = new Vector2Int((int) Mathf.Round(Mathf.Cos(randomAngle) * (radiusOfIsland/0.9f)), (int) Mathf.Round(Mathf.Sin(randomAngle) * (radiusOfIsland/.9f)));
+        float randomAngle = Random.Range(0,2 * Mathf.PI);
+        Vector2Int stoneCirclePos = new Vector2Int((int) Mathf.Round(Mathf.Cos(randomAngle) * (radiusOfIsland * 0.9f)), (int) Mathf.Round(Mathf.Sin(randomAngle) * (radiusOfIsland * 0.9f)));
 
-        for(int x = UnityEngine.Random.Range(-stoneCircleRadius,0); x < UnityEngine.Random.Range(0,stoneCircleRadius); x++) {
-            for(int y = UnityEngine.Random.Range(-stoneCircleRadius,0); y < UnityEngine.Random.Range(0,stoneCircleRadius); y++) {
+        for(int x = Random.Range(-stoneCircleRadius,0); x < Random.Range(0,stoneCircleRadius); x++) {
+            for(int y = Random.Range(-stoneCircleRadius,0); y < Random.Range(0,stoneCircleRadius); y++) {
                 float dis = Vector2.Distance(stoneCirclePos, new(x + stoneCirclePos.x, y + stoneCirclePos.y));
 
                 if(dis < stoneCircleRadius) {
@@ -225,7 +238,7 @@ public class TerrainGenerator : MonoBehaviour
             for(int y = -radiusOfIsland; y < radiusOfIsland; y++) {
                 TileData tileData = backgroundTilemap.GetTile(new(x,y,0)) as TileData;
 
-                if(tileData.tileName == "Grass" && collidableTilemap.GetTile(new(x,y,0)) == null && UnityEngine.Random.Range(0f,1f) < treeSpawnRate) {
+                if(tileData.tileName == "Grass" && collidableTilemap.GetTile(new(x,y,0)) == null && Random.Range(0f,1f) < treeSpawnRate) {
                     GameObject treeCopy = Instantiate(tree);
 
                     treeCopy.transform.position = new(x,y,0);
@@ -235,7 +248,46 @@ public class TerrainGenerator : MonoBehaviour
             }
         }
 
+        // spawn the graveyards
+        for(int i = 0; i < amountOfGraveyards; i++) {
+            SpawnGraveyard();
+        }
+    }
 
+    private void SpawnGraveyard() {
+        // spanw the graveyard
+        float randomAngle = Random.Range(0,2 * Mathf.PI);
+        Vector2Int graveyardPos = new Vector2Int((int) Mathf.Round(Mathf.Cos(randomAngle) * (radiusOfIsland * 0.65f)), (int) Mathf.Round(Mathf.Sin(randomAngle) * (radiusOfIsland * 0.65f)));
+
+        GameObject instantatedGraveyard = Instantiate(graveyard);
+        instantatedGraveyard.transform.position = new Vector3(graveyardPos.x, graveyardPos.y, 0);
+
+
+        // make the grass around the graveyard graveyard grass
+        for(int x = -graveyardGrassRadius; x < graveyardGrassRadius; x++) {
+            for(int y = -graveyardGrassRadius; y < graveyardGrassRadius; y++) {
+                float disFromGraveyard = Vector2.Distance(graveyardPos, new(x + graveyardPos.x, y + graveyardPos.y));
+
+                if(disFromGraveyard > graveyardGrassRadius) continue;
+
+                float probabilityOfGraveyardGrass = Mathf.Pow(2f, -(disFromGraveyard / graveyardGrassRadius));
+
+                if(probabilityOfGraveyardGrass < Random.Range(0,1)) {
+                    PlaceBlock(x + graveyardPos.x, y + graveyardPos.y, "Graveyard Grass", false);
+                }
+            }
+        }
+
+        
+        // destroy all of the trees in the area
+
+        Collider2D[] collidersInGraveyardCircle = Physics2D.OverlapCircleAll(graveyardPos, graveyardGrassRadius + 15);
+
+        for(int i = 0; i < collidersInGraveyardCircle.Length; i++) {
+            if(collidersInGraveyardCircle[i].CompareTag("Tree")) {
+                Destroy(collidersInGraveyardCircle[i].gameObject);
+            }
+        }
     }
 
     private void OnDrawGizmos()

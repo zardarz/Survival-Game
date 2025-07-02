@@ -10,11 +10,11 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: ab732d786bf4f427a9a57072eb863a5e, type: 3}
-  m_Name: Best axe ever made in history
+  m_Name: The Axe
   m_EditorClassIdentifier: 
-  itemName: best axe
+  itemName: The Axe
   description: This item has no description
-  sprite: {fileID: 21300000, guid: 932908f71dec64dbd8073c4b00072d78, type: 3}
+  sprite: {fileID: 21300000, guid: 29a71f611674648dd9dc6b8b90942b50, type: 3}
   stackable: 0
   showWhenHolding: 0
   generatedSprite: 0
@@ -22,7 +22,7 @@ MonoBehaviour:
   maxStack: 1
   toolSpeed: 30
   toolStrength: Infinity
-  toolRange: 100
+  toolRange: Infinity
   tree:
     serializedVersion: 2
     m_Bits: 512

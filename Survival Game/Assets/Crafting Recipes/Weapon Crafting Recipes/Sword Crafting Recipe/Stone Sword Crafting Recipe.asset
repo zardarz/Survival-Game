@@ -12,6 +12,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 45c7d5630ae044c44818eb6bc0c54173, type: 3}
   m_Name: Stone Sword Crafting Recipe
   m_EditorClassIdentifier: 
-  CraftingIngredients: []
-  ResultingItem: {fileID: 11400000, guid: 1a92759ee599945718b1ce23beceaa18, type: 2}
-  ResultingItemQuantity: 1
+  CraftingIngredients:
+  - CraftingIngredientItem: {fileID: 11400000, guid: 99098a769b99449babae04f47e81edbd, type: 2}
+    CraftingIngredientQuantity: 3
+  - CraftingIngredientItem: {fileID: 11400000, guid: f64f385d5d2fb4471943f21305a33247, type: 2}
+    CraftingIngredientQuantity: 1
+  ResultingItem: {fileID: 11400000, guid: fb415c31bcb034b28914e162d17dbc6b, type: 2}
+  ResultingItemQuantity: 3
