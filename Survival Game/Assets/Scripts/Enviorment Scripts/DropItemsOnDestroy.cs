@@ -10,10 +10,12 @@ public class DropItemsOnDestroy : MonoBehaviour
 
     private bool isQuitting = false;
 
+    public bool dropItemsOnDestroy = true;
+
     void OnDestroy()
     {
         // this makes sure it doesn't drop items when i stop the game
-        if(isQuitting) return;
+        if(isQuitting || !dropItemsOnDestroy) return;
 
         for(int i = 0; i < dropItemOnDestroyEntries.Length; i++) {
             DropItemOnDestroyEntry dropItemOnDestroyEntry = dropItemOnDestroyEntries[i];

@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 using UnityEngine.Tilemaps;
 using Random = UnityEngine.Random;
@@ -40,13 +41,14 @@ public class TerrainGenerator : MonoBehaviour
     // debug stuff
     private static Vector3Int brokenBlockPosition;
 
+    private static List<Vector2> posOfCirlces = new List<Vector2>();
+    private static List<float> radiusOfCircles = new List<float>();
 
     void Awake() {
         staticDroppedItemPrefab = droppedItemPrefab;
     }
 
     void Start() {
-
         randomTextureGenerator = gameObject.GetComponent<RandomTextureGenerator>();
 
         backgroundTilemap = gameObject.transform.GetChild(0).GetChild(0).GetComponent<Tilemap>();
@@ -250,7 +252,7 @@ public class TerrainGenerator : MonoBehaviour
 
         // spawn the graveyards
         for(int i = 0; i < amountOfGraveyards; i++) {
-            SpawnGraveyard();
+            Invoke(nameof(SpawnGraveyard), 0.1f);
         }
     }
 
@@ -272,7 +274,7 @@ public class TerrainGenerator : MonoBehaviour
 
                 float probabilityOfGraveyardGrass = Mathf.Pow(2f, -(disFromGraveyard / graveyardGrassRadius));
 
-                if(probabilityOfGraveyardGrass < Random.Range(0,1)) {
+                if(probabilityOfGraveyardGrass < Random.Range(0f,1f)) {
                     PlaceBlock(x + graveyardPos.x, y + graveyardPos.y, "Graveyard Grass", false);
                 }
             }
@@ -280,20 +282,43 @@ public class TerrainGenerator : MonoBehaviour
 
         
         // destroy all of the trees in the area
+        Collider2D[] collidersInGraveyardCircle = Physics2D.OverlapCircleAll(graveyardPos, graveyardGrassRadius + 3, ~0);
+        //Debug.Log(collidersInGraveyardCircle.Length);
 
-        Collider2D[] collidersInGraveyardCircle = Physics2D.OverlapCircleAll(graveyardPos, graveyardGrassRadius + 15);
+        posOfCirlces.Add(graveyardPos);
+        radiusOfCircles.Add(graveyardGrassRadius);
 
         for(int i = 0; i < collidersInGraveyardCircle.Length; i++) {
             if(collidersInGraveyardCircle[i].CompareTag("Tree")) {
+                collidersInGraveyardCircle[i].GetComponent<DropItemsOnDestroy>().dropItemsOnDestroy = false;
                 Destroy(collidersInGraveyardCircle[i].gameObject);
             }
         }
     }
 
-    private void OnDrawGizmos()
-    {
+    private void OnDrawGizmos() {
         Gizmos.color = Color.red;
         Gizmos.DrawCube(brokenBlockPosition + Vector3.one * 0.5f, Vector3.one * 0.3f);
+
+        Gizmos.color = Color.green;
+
+        for (int i = 0; i < posOfCirlces.Count; i++)
+        {
+            Vector3 center = posOfCirlces[i];
+            float radius = radiusOfCircles[i];
+            Vector3 prevPoint = center + Vector3.right * radius;
+
+            int segments = 36;
+
+            for (int circleSegmentIndex = 1; circleSegmentIndex <= segments; circleSegmentIndex++)
+            {
+                float angle = (circleSegmentIndex * 2 * Mathf.PI) / segments;
+                Vector3 newPoint = center + new Vector3(Mathf.Cos(angle), Mathf.Sin(angle), 0) * radius;
+                Gizmos.DrawLine(prevPoint, newPoint);
+                prevPoint = newPoint;
+            }
+        }
     }
+
 
 }

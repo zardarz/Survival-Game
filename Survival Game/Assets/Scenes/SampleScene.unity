@@ -5329,7 +5329,7 @@ MonoBehaviour:
   - tileName: Water
     tileColor: {r: 0.028346404, g: 0.11685189, b: 0.8584906, a: 1}
   - tileName: Graveyard Grass
-    tileColor: {r: 0.206, g: 0.13434783, b: 0.11643478, a: 1}
+    tileColor: {r: 0.22745098, g: 0.26666668, b: 0.32941177, a: 1}
 --- !u!114 &909248377
 MonoBehaviour:
   m_ObjectHideFlags: 0

@@ -10,17 +10,23 @@ public class DayAndNightCycle : MonoBehaviour
 
     [SerializeField] private Gradient dayAndNightGradient;
 
-    private Light2D light;
+    private Light2D globalLight;
+
+    public static bool isNightTime;
 
     void Start()
     {
-        light = gameObject.GetComponent<Light2D>();
+        globalLight = gameObject.GetComponent<Light2D>();
     }
 
     void Update()
     {
         time += Time.deltaTime;
 
-        light.color = dayAndNightGradient.Evaluate((time % lengthOfDay) / lengthOfDay);
+        float zeroToOneTime = (time % lengthOfDay) / lengthOfDay;
+
+        isNightTime = zeroToOneTime > 0.3f && zeroToOneTime < 0.7f;
+
+        globalLight.color = dayAndNightGradient.Evaluate(zeroToOneTime);
     }
 }
