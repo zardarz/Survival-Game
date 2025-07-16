@@ -14,7 +14,7 @@ public class Sword : Weapon
     public override void Use() {
         Transform playerTransform = PlayerMovement.GetPlayerTransform();
 
-        Vector2 dir = Camera.main.ScreenToWorldPoint(Input.mousePosition) - playerTransform.position;
+        Vector2 dir = (Camera.main.ScreenToWorldPoint(Input.mousePosition) - playerTransform.position).normalized;
 
         dir *= swordRange/2;
 

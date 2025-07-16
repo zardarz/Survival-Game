@@ -189,6 +189,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   minDisToChasePlayer: 2.5
+  damage: 5
 --- !u!95 &617867913691813453
 Animator:
   serializedVersion: 5

@@ -3,6 +3,8 @@ using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.EventSystems;
+using Vector2 = UnityEngine.Vector2;
+using System;
 
 public class InventoryManager : MonoBehaviour
 {
@@ -57,6 +59,7 @@ public class InventoryManager : MonoBehaviour
     private List<CraftingRecipe> craftableCraftingRecipes = new List<CraftingRecipe>();
 
     private CraftingRecipe selectedCraftingRecipe;
+    private Vector2Int posOfOpenedWorkingStation = new Vector2Int(1234567890, 0);
 
     void Start() {
         totalSlots = inventorySize.x * inventorySize.y;
@@ -83,6 +86,8 @@ public class InventoryManager : MonoBehaviour
         TryToShowSelectedItem();
 
         SetSelectedItemWithCursorImageAndCount();
+
+        CloseOpenedWorkStationIfNeeded();
     }
 
     private void HandleHotBarInputs() {
@@ -332,6 +337,9 @@ public class InventoryManager : MonoBehaviour
             craftingInterface.SetActive(true);
             canUseItem = false;
         }
+
+        Vector2 mousePos = Camera.main.ScreenToWorldPoint(Input.mousePosition);
+        posOfOpenedWorkingStation = new Vector2Int((int) Mathf.Round(mousePos.x), (int) Mathf.Round(mousePos.y));
     }
 
     public void OnButtonClick(GameObject buttonObj, bool wasRightClick) {
@@ -805,5 +813,14 @@ public class InventoryManager : MonoBehaviour
 
 
         return false;
+    }
+
+    private void CloseOpenedWorkStationIfNeeded() {
+        if(posOfOpenedWorkingStation.x == 1234567890) return;
+
+        if(Vector2.Distance(transform.position, (Vector2) posOfOpenedWorkingStation) > 2f) {
+            ToggleCraftingInterface();
+            posOfOpenedWorkingStation.x = 1234567890;
+        }
     }
 }

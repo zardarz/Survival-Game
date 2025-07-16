@@ -10,6 +10,8 @@ public class GraveyardScript : MonoBehaviour
     [SerializeField] private float timeUntilSpawn;
 
     void Update() {
+        if(DayAndNightCycle.isNightTime == false) return;
+        
         timeUntilSpawn -= Time.deltaTime;
 
         if(timeUntilSpawn <= 0f) {

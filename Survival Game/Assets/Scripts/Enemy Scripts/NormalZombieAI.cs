@@ -6,6 +6,7 @@ public class NormalZombieAI : MonoBehaviour
     [SerializeField] private float minDisToChasePlayer;
     private Transform player;
 
+    [SerializeField] private float damage;
     private Animator animator;
 
     private float disToPlayer;
@@ -28,6 +29,10 @@ public class NormalZombieAI : MonoBehaviour
         } else {
             animator.SetTrigger("StopChasingPlayer");
         }
+
+        if(disToPlayer <= 1f) {
+            animator.SetTrigger("AttackPlayer");
+        }
     }
 
     public void LookAtPlayer()
@@ -39,6 +44,10 @@ public class NormalZombieAI : MonoBehaviour
             spriteRenderer.flipX = false;
 		}
 	}
+
+    public float GetDamage() {
+        return damage;
+    }
 
     void OnDrawGizmos()
     {

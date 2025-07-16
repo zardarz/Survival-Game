@@ -41,8 +41,8 @@ public class TerrainGenerator : MonoBehaviour
     // debug stuff
     private static Vector3Int brokenBlockPosition;
 
-    private static List<Vector2> posOfCirlces = new List<Vector2>();
-    private static List<float> radiusOfCircles = new List<float>();
+    public static List<Vector2> posOfCirlces = new List<Vector2>();
+    public static List<float> radiusOfCircles = new List<float>();
 
     void Awake() {
         staticDroppedItemPrefab = droppedItemPrefab;
