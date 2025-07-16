@@ -2,12 +2,18 @@ using UnityEngine;
 
 public class Health : MonoBehaviour
 {
-    [SerializeField] private float health;
+    [SerializeField] protected float health;
+    protected float maxHealth;
 
     [SerializeField] protected ParticleSystem particlePlayedOnDeath;
     [SerializeField] private ParticleSystem particlePlayedOnHit;
 
-    public void TakeDamage(float damage) {
+    void Awake()
+    {
+        maxHealth = health;
+    }
+
+    public virtual void TakeDamage(float damage) {
         health -= damage;
 
         PlayParticle(particlePlayedOnHit);

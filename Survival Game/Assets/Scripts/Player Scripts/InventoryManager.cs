@@ -336,10 +336,10 @@ public class InventoryManager : MonoBehaviour
             AddToCraftingInterfaceContent();
             craftingInterface.SetActive(true);
             canUseItem = false;
-        }
 
-        Vector2 mousePos = Camera.main.ScreenToWorldPoint(Input.mousePosition);
-        posOfOpenedWorkingStation = new Vector2Int((int) Mathf.Round(mousePos.x), (int) Mathf.Round(mousePos.y));
+            Vector2 mousePos = Camera.main.ScreenToWorldPoint(Input.mousePosition);
+            posOfOpenedWorkingStation = new Vector2Int((int) Mathf.Round(mousePos.x), (int) Mathf.Round(mousePos.y));
+        }
     }
 
     public void OnButtonClick(GameObject buttonObj, bool wasRightClick) {
@@ -719,7 +719,7 @@ public class InventoryManager : MonoBehaviour
         }
 
         for(int i = 0; i < selectedCraftingRecipe.resultingItemQuantity; i++) {
-            AddItemToInventory(selectedCraftingRecipe.resultingItem);
+            AddItemToInventory(Instantiate(selectedCraftingRecipe.resultingItem));
         }
 
         CalculateCraftableCraftingRecipes();
@@ -816,11 +816,10 @@ public class InventoryManager : MonoBehaviour
     }
 
     private void CloseOpenedWorkStationIfNeeded() {
-        if(posOfOpenedWorkingStation.x == 1234567890) return;
+        if(craftingInterface.activeSelf == false) return;
 
         if(Vector2.Distance(transform.position, (Vector2) posOfOpenedWorkingStation) > 2f) {
             ToggleCraftingInterface();
-            posOfOpenedWorkingStation.x = 1234567890;
         }
     }
 }

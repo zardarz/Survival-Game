@@ -14,6 +14,8 @@ public class DayAndNightCycle : MonoBehaviour
 
     public static bool isNightTime;
 
+    public bool isitnighttime;
+
     void Start()
     {
         globalLight = gameObject.GetComponent<Light2D>();
@@ -28,5 +30,7 @@ public class DayAndNightCycle : MonoBehaviour
         isNightTime = zeroToOneTime > 0.3f && zeroToOneTime < 0.7f;
 
         globalLight.color = dayAndNightGradient.Evaluate(zeroToOneTime);
+
+        isitnighttime = isNightTime;
     }
 }

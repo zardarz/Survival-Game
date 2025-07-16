@@ -14,7 +14,10 @@ public class Axe : Tool
         RaycastHit2D hit = Physics2D.Raycast(playerTransform.position, dir, toolRange, tree);
 
         if(hit.transform != null && hit.transform.CompareTag("Tree")) {
-            hit.transform.GetComponent<TreeScript>().TryDestoryTree(GetToolStrength());
+            if(hit.transform.GetComponent<TreeScript>().treeStrength <= GetToolStrength()) {
+                hit.transform.GetComponent<DropItemsOnDestroy>().DropItems();
+                Destroy(hit.transform.gameObject);
+            }
         }
     }
 }

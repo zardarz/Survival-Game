@@ -14,15 +14,28 @@ public class RandomTextureGenerator : MonoBehaviour
 
     private static Dictionary<string, Sprite[]> sprites = new Dictionary<string, Sprite[]>();
 
+    private static bool hasInitialized = false;
+
     void Awake() {
         randomTextures = new Texture2D[amountOfUniqueRandomTextures];
         GenerateRandomTextures();
 
-        // generate all of the textures for the world
-        SetTextures();
+        if (!hasInitialized)
+        {
+            hasInitialized = true;
+            DontDestroyOnLoad(gameObject);
 
-        // generate all of the sprites for the world
-        SetSprites();
+            //only runs once
+            // generate all of the textures for the world
+            SetTextures();
+
+            // generate all of the sprites for the world
+            SetSprites();
+        }
+        else
+        {
+            Destroy(gameObject); // cleanup duplicate
+        }
     }
 
     private void GenerateRandomTextures() {

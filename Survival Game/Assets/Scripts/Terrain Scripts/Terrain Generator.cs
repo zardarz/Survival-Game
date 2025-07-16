@@ -1,6 +1,5 @@
 using System;
 using System.Collections.Generic;
-using System.Linq;
 using UnityEngine;
 using UnityEngine.Tilemaps;
 using Random = UnityEngine.Random;
@@ -189,6 +188,8 @@ public class TerrainGenerator : MonoBehaviour
 
     private void GenerateIsland() {
 
+        print("Generating Land");
+
         // place water in a big square
 
         for(int x = -radiusOfIsland*5; x < radiusOfIsland*5; x++) {
@@ -246,6 +247,8 @@ public class TerrainGenerator : MonoBehaviour
                     treeCopy.transform.position = new(x,y,0);
 
                     treeCopy.GetComponent<SpriteRenderer>().sortingOrder = radiusOfIsland - y + 2;
+
+                    DontDestroyOnLoad(treeCopy);
                 }
             }
         }
@@ -263,6 +266,8 @@ public class TerrainGenerator : MonoBehaviour
 
         GameObject instantatedGraveyard = Instantiate(graveyard);
         instantatedGraveyard.transform.position = new Vector3(graveyardPos.x, graveyardPos.y, 0);
+
+        DontDestroyOnLoad(instantatedGraveyard);
 
 
         // make the grass around the graveyard graveyard grass

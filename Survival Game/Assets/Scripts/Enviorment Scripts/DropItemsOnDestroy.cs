@@ -1,4 +1,5 @@
 using UnityEngine;
+using UnityEngine.SceneManagement;
 using Random = UnityEngine.Random;
 
 public class DropItemsOnDestroy : MonoBehaviour
@@ -8,15 +9,9 @@ public class DropItemsOnDestroy : MonoBehaviour
 
     [SerializeField] private GameObject droppedItemPrefab;
 
-    private bool isQuitting = false;
-
     public bool dropItemsOnDestroy = true;
 
-    void OnDestroy()
-    {
-        // this makes sure it doesn't drop items when i stop the game
-        if(isQuitting || !dropItemsOnDestroy) return;
-
+    public void DropItems() {
         for(int i = 0; i < dropItemOnDestroyEntries.Length; i++) {
             DropItemOnDestroyEntry dropItemOnDestroyEntry = dropItemOnDestroyEntries[i];
             int amountOfItem = Random.Range(dropItemOnDestroyEntry.minAmountOfItem, dropItemOnDestroyEntry.maxAmountOfItem);
@@ -39,9 +34,5 @@ public class DropItemsOnDestroy : MonoBehaviour
 
             droppedItemComponent.StartCotrotean(0f);
         }
-    }
-
-    void OnApplicationQuit() {
-        isQuitting = true;
     }
 }
