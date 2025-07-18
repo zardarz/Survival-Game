@@ -4,7 +4,7 @@ using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.EventSystems;
 using Vector2 = UnityEngine.Vector2;
-using System;
+using UnityEngine.SceneManagement;
 
 public class InventoryManager : MonoBehaviour
 {
@@ -59,16 +59,29 @@ public class InventoryManager : MonoBehaviour
     private List<CraftingRecipe> craftableCraftingRecipes = new List<CraftingRecipe>();
 
     private CraftingRecipe selectedCraftingRecipe;
-    private Vector2Int posOfOpenedWorkingStation = new Vector2Int(1234567890, 0);
+    private Vector2Int posOfOpenedWorkingStation;
+
+    [Header("Other Stuff")]
+    [SerializeField] private GameObject pauseMenu;
 
     void Start() {
         totalSlots = inventorySize.x * inventorySize.y;
 
-        inventoryItems = new Item[totalSlots];
-        hotBarItems = new Item[inventorySize.y];
+        if(InventoryBuffer.inventoryItems == null) {
+            InventoryBuffer.inventoryItems = new Item[18];
+            InventoryBuffer.hotbarItems = new Item[6];
+        }
+        
+        inventoryItems = InventoryBuffer.inventoryItems;
+        hotBarItems = InventoryBuffer.hotbarItems;
 
         selectedItemWithCursorImage = selectedItemWithCursorGO.GetComponent<Image>();
         selectedItemWithCursorCount = selectedItemWithCursorGO.transform.GetChild(0).GetComponent<TMP_Text>();
+    }
+
+    public static void UpdateInventoryBuffers() {
+        GameObject.Find("Inventory Buffer").GetComponent<InventoryBuffer>().SetInventoryItems(inventoryItems);
+        GameObject.Find("Inventory Buffer").GetComponent<InventoryBuffer>().SetHotbarItems(hotBarItems);
     }
 
     void Update() {
@@ -97,6 +110,9 @@ public class InventoryManager : MonoBehaviour
         if(Input.GetKeyDown(KeyCode.Alpha4)) {slotSelected = 4; nextTimeToFire = 0f;} // pressed four
         if(Input.GetKeyDown(KeyCode.Alpha5)) {slotSelected = 5; nextTimeToFire = 0f;} // pressed five
         if(Input.GetKeyDown(KeyCode.Alpha6)) {slotSelected = 6; nextTimeToFire = 0f;} // pressed six
+
+        if(Input.GetKeyDown(KeyCode.Escape) && pauseMenu.activeSelf) {DeActivatePauseMenu();} else if(Input.GetKeyDown(KeyCode.Escape))
+        {ActivatePauseMenu();}
 
         if(itemSelectedInHand == null) {
             return;
@@ -816,10 +832,20 @@ public class InventoryManager : MonoBehaviour
     }
 
     private void CloseOpenedWorkStationIfNeeded() {
-        if(craftingInterface.activeSelf == false) return;
+        if(craftingInterface.activeSelf == true) canUseItem = false; else return;
 
         if(Vector2.Distance(transform.position, (Vector2) posOfOpenedWorkingStation) > 2f) {
             ToggleCraftingInterface();
         }
+    }
+
+    private void ActivatePauseMenu() {
+        pauseMenu.SetActive(true);
+        Time.timeScale = 0f;
+    }
+
+    private void DeActivatePauseMenu() {
+        pauseMenu.SetActive(false);
+        Time.timeScale = 1f;
     }
 }

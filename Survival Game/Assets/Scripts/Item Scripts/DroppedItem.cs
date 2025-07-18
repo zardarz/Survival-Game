@@ -7,6 +7,11 @@ public class DroppedItem : MonoBehaviour
 
     public bool canBePickedup = false;
 
+    void Start()
+    {
+        DontDestroyOnLoad(gameObject);
+    }
+
     public void AddForceOnDrop(float strength) {
         float angle = Random.Range(0f, 2*Mathf.PI);
         Vector2 randomDir = new Vector2(Mathf.Cos(angle), Mathf.Sin(angle));

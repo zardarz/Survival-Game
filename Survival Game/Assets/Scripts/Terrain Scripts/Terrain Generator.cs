@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.Tilemaps;
 using Random = UnityEngine.Random;
@@ -187,14 +188,11 @@ public class TerrainGenerator : MonoBehaviour
     }
 
     private void GenerateIsland() {
-
-        print("Generating Land");
-
         // place water in a big square
 
         for(int x = -radiusOfIsland*5; x < radiusOfIsland*5; x++) {
             for(int y = -radiusOfIsland*5; y < radiusOfIsland*5; y++) {
-                PlaceBlock(x, y, "Water", false);
+                PlaceBlock(x,y, "Water", false);
             }
         }
 
@@ -213,7 +211,7 @@ public class TerrainGenerator : MonoBehaviour
 
                     TileData tilePlaced = GetTileDataFromHeight(height);
 
-                    PlaceBlock(x,y, tilePlaced.tileName, false);
+                    PlaceBlock(x,y, tilePlaced.tileName, PlaceableItems.placeables[tilePlaced.tileName].GetCollidable());
                 }
 
             }
@@ -241,7 +239,7 @@ public class TerrainGenerator : MonoBehaviour
             for(int y = -radiusOfIsland; y < radiusOfIsland; y++) {
                 TileData tileData = backgroundTilemap.GetTile(new(x,y,0)) as TileData;
 
-                if(tileData.tileName == "Grass" && collidableTilemap.GetTile(new(x,y,0)) == null && Random.Range(0f,1f) < treeSpawnRate) {
+                if(tileData.tileName == "Grass" && collidableTilemap.GetTile(new(x,y,0)) == null && Random.Range(0f,1f) < treeSpawnRate && Vector2.Distance(Vector2.zero, new(x,y)) > 3f) {
                     GameObject treeCopy = Instantiate(tree);
 
                     treeCopy.transform.position = new(x,y,0);
