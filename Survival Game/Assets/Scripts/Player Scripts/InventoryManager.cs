@@ -834,6 +834,8 @@ public class InventoryManager : MonoBehaviour
     private void CloseOpenedWorkStationIfNeeded() {
         if(craftingInterface.activeSelf == true) canUseItem = false; else return;
 
+        print(Vector2.Distance(transform.position, (Vector2) posOfOpenedWorkingStation));
+
         if(Vector2.Distance(transform.position, (Vector2) posOfOpenedWorkingStation) > 2f) {
             ToggleCraftingInterface();
         }

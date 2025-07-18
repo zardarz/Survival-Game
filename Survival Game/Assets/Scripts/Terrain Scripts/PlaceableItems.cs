@@ -8,7 +8,7 @@ public class PlaceableItems : MonoBehaviour
 
     public static Dictionary<string, Placeable> placeables = new Dictionary<string, Placeable>();
 
-    void Awake()
+    void Start()
     {
         for(int i = 0; i < placeableTileEntries.Length; i++) {
             Placeable placeable = Instantiate(placeableTileEntries[i].placeable);
@@ -26,5 +26,6 @@ public class PlaceableItems : MonoBehaviour
                 interactable.onRightClick.AddListener(inventoryManager.ToggleCraftingInterface);
             }
         }
+        print("Start");
     }
 }

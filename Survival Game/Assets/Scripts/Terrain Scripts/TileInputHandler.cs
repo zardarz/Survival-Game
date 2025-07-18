@@ -27,6 +27,7 @@ public class TileInputHandler : MonoBehaviour
             Interactable interactablePressed = placeablePressed as Interactable;
 
             interactablePressed.onRightClick.Invoke();
+            print("invoked thingy");
         }
     }
 }
