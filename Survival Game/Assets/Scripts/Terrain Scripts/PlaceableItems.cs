@@ -10,13 +10,18 @@ public class PlaceableItems : MonoBehaviour
 
     void Awake()
     {
+        bool doit = placeables.Count == 0;
+
         for(int i = 0; i < placeableTileEntries.Length; i++) {
             Placeable placeable = Instantiate(placeableTileEntries[i].placeable);
-            placeables.Add(placeableTileEntries[i].placeableName, placeable);
+            
+            if(doit){
+                placeables.Add(placeableTileEntries[i].placeableName, placeable);
 
-            if(placeable.GetGeneratedSprite()) {
-                placeable.GenerateSprite();
-                placeable.SpriteWasGenerated();
+                if(placeable.GetGeneratedSprite()) {
+                    placeable.GenerateSprite();
+                    placeable.SpriteWasGenerated();
+                }
             }
 
             if(placeable is Interactable) {
@@ -26,5 +31,7 @@ public class PlaceableItems : MonoBehaviour
                 interactable.onRightClick.AddListener(inventoryManager.ToggleCraftingInterface);
             }
         }
+
+        print("aa");
     }
 }
