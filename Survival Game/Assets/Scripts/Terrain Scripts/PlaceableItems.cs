@@ -10,6 +10,11 @@ public class PlaceableItems : MonoBehaviour
 
     void Awake()
     {
+        inventoryManager = GameObject.Find("Player").GetComponent<InventoryManager>();
+        placeables.Clear();
+
+        if(inventoryManager == null) print("player not found");
+
         for(int i = 0; i < placeableTileEntries.Length; i++) {
             Placeable placeable = Instantiate(placeableTileEntries[i].placeable);
             placeables.Add(placeableTileEntries[i].placeableName, placeable);
@@ -20,6 +25,7 @@ public class PlaceableItems : MonoBehaviour
             }
 
             if(placeable is Interactable) {
+                print("interactable");
                 Interactable interactable = placeable as Interactable;
 
                 interactable.onRightClick.RemoveAllListeners();

@@ -6237,7 +6237,6 @@ GameObject:
   - component: {fileID: 909248375}
   - component: {fileID: 909248374}
   - component: {fileID: 909248376}
-  - component: {fileID: 909248377}
   - component: {fileID: 909248378}
   m_Layer: 0
   m_Name: Map
@@ -6314,38 +6313,6 @@ MonoBehaviour:
     tileColor: {r: 0.22745098, g: 0.26666668, b: 0.32941177, a: 1}
   - tileName: Background Stone
     tileColor: {r: 0.099, g: 0.099, b: 0.099, a: 1}
---- !u!114 &909248377
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 909248373}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: ea1a35014a97544858ede4c830da3028, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  placeableTileEntries:
-  - placeableName: Stone
-    placeable: {fileID: 11400000, guid: 99098a769b99449babae04f47e81edbd, type: 2}
-  - placeableName: Grass
-    placeable: {fileID: 11400000, guid: e9e7722e79d8d4f41b5e764c9e31df0e, type: 2}
-  - placeableName: Wood
-    placeable: {fileID: 11400000, guid: f64f385d5d2fb4471943f21305a33247, type: 2}
-  - placeableName: Sand
-    placeable: {fileID: 11400000, guid: d1bc67253e3894f569560860a3b3509f, type: 2}
-  - placeableName: Water
-    placeable: {fileID: 11400000, guid: d76c281d4f53b4b8ba292dfe93a8825f, type: 2}
-  - placeableName: Crafting Station
-    placeable: {fileID: 11400000, guid: 1a92759ee599945718b1ce23beceaa18, type: 2}
-  - placeableName: Graveyard Grass
-    placeable: {fileID: 11400000, guid: 893a6c29ceaaf4d1dac08ae8f7a7c21d, type: 2}
-  - placeableName: Background Stone
-    placeable: {fileID: 11400000, guid: 77680d150737f4910b798ff71685a0ee, type: 2}
-  - placeableName: Background Wood
-    placeable: {fileID: 11400000, guid: caae4dfd3d9dd42abb83b29fac2dcdb9, type: 2}
-  inventoryManager: {fileID: 1991317757}
 --- !u!114 &909248378
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -12673,6 +12640,70 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   inventoryManager: {fileID: 1991317757}
+--- !u!1 &1799081652
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1799081654}
+  - component: {fileID: 1799081653}
+  m_Layer: 0
+  m_Name: AHHHHHHHHHHHHHHHHHHH
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &1799081653
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1799081652}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ea1a35014a97544858ede4c830da3028, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  placeableTileEntries:
+  - placeableName: Stone
+    placeable: {fileID: 11400000, guid: 99098a769b99449babae04f47e81edbd, type: 2}
+  - placeableName: Grass
+    placeable: {fileID: 11400000, guid: e9e7722e79d8d4f41b5e764c9e31df0e, type: 2}
+  - placeableName: Wood
+    placeable: {fileID: 11400000, guid: f64f385d5d2fb4471943f21305a33247, type: 2}
+  - placeableName: Sand
+    placeable: {fileID: 11400000, guid: d1bc67253e3894f569560860a3b3509f, type: 2}
+  - placeableName: Water
+    placeable: {fileID: 11400000, guid: d76c281d4f53b4b8ba292dfe93a8825f, type: 2}
+  - placeableName: Crafting Station
+    placeable: {fileID: 11400000, guid: 1a92759ee599945718b1ce23beceaa18, type: 2}
+  - placeableName: Graveyard Grass
+    placeable: {fileID: 11400000, guid: 893a6c29ceaaf4d1dac08ae8f7a7c21d, type: 2}
+  - placeableName: Background Stone
+    placeable: {fileID: 11400000, guid: 77680d150737f4910b798ff71685a0ee, type: 2}
+  - placeableName: Background Wood
+    placeable: {fileID: 11400000, guid: caae4dfd3d9dd42abb83b29fac2dcdb9, type: 2}
+  inventoryManager: {fileID: 1991317757}
+--- !u!4 &1799081654
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1799081652}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 15.54305, y: 3.0016086, z: 0.38560566}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1808293045
 GameObject:
   m_ObjectHideFlags: 0
@@ -14918,3 +14949,4 @@ SceneRoots:
   - {fileID: 1757712463}
   - {fileID: 739118567}
   - {fileID: 894606425}
+  - {fileID: 1799081654}
